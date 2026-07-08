@@ -97,7 +97,7 @@ CREATE TABLE Admission (
 	CONSTRAINT FK_Admission_Department FOREIGN KEY (department_id) REFERENCES Department(id),
 );
 CREATE TABLE Medication (
-	id INT NOT NULL,
+	id INT NOT NULL IDENTITY(1, 1),
 	name VARCHAR(50) NOT NULL,
 	unit VARCHAR(10) NOT NULL,
 	price INT NOT NULL,
