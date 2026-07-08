@@ -71,6 +71,7 @@ INSERT INTO Prescription (notes, medical_record_id, created_at) VALUES
 ('Eat less fatty foods.', 2, '2025-09-02'),
 ('Exercise regularly.', 4, '2026-01-04'),
 ('Take medication as prescribed.', 5, '2026-04-09');
+GO
 
 INSERT INTO PrescriptionItem (prescription_id, medication_id, dosage_instruction, duration_days, quantity_dispensed) VALUES
 (1, 1, 'Take one tablet daily after meals.', 30, 30),
@@ -101,3 +102,4 @@ INSERT INTO Admission (room, admission_date, discharge_date, cost, patient_id, d
 ('404D', '2026-01-04', '2026-01-14', 8000, 4, 4, 1),
 ('606F', '2026-05-01', NULL, NULL, 1, 2, 2),
 ('102A', '2026-07-03', NULL, NULL, 2, 3, 1),
+GO
