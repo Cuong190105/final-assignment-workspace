@@ -1,3 +1,4 @@
+--Vu Duc Thai--
 CREATE PROCEDURE BookAppointment
     @AppointmentDateTime DATETIME,
     @Reason NVARCHAR(255),

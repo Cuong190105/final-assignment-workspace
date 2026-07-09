@@ -1,3 +1,4 @@
+--Vu Duc Thai--
 CREATE VIEW ActivePatients
 AS
 SELECT
