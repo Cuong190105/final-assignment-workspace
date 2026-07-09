@@ -4,26 +4,26 @@ GO
 -- DEFAULT DATA
 
 INSERT INTO Medication (name, unit, price, stock) VALUES
-("Paracetamol 500mg", "tablet", 1200, 5000),
-("Amoxicillin 500mg", "capsule", 2500, 3000),
-("Ibuprofen 400mg", "tablet", 1800, 2500),
-("Panadol Extra", "tablet", 2200, 4000),
-("Berberin", "tablet", 500, 10000),
-("Cephalexin 500mg", "capsule", 3000, 1500),
-("Augmentin 1g", "tablet", 18500, 800),
-("Nexium 40mg", "tablet", 24000, 600),
-("Salonpas Gel", "tube", 35000, 150),
-("Voltaren Emulgel", "tube", 75000, 120),
-("Gaviscon Dual Action", "sachet", 6500, 5),
-("Smecta", "sachet", 4800, 2000),
-("Otrivin 0.1%", "bottle", 55000, 8),
-("Tobradex Eyedrops", "bottle", 58000, 300),
-("Eugica Green", "capsule", 1200, 6000),
-("Efferalgan Codeine", "tablet", 4500, 1800),
-("Boganic", "softgel", 2800, 3500),
-("Maalox", "tablet", 1500, 2200),
-("Contractubex", "tube", 185000, 90),
-("Natri Clorid 0.9%", "bottle", 6000, 1500);
+('Paracetamol 500mg', 'tablet', 1200, 5000),
+('Amoxicillin 500mg', 'capsule', 2500, 3000),
+('Ibuprofen 400mg', 'tablet', 1800, 2500),
+('Panadol Extra', 'tablet', 2200, 4000),
+('Berberin', 'tablet', 500, 10000),
+('Cephalexin 500mg', 'capsule', 3000, 1500),
+('Augmentin 1g', 'tablet', 18500, 800),
+('Nexium 40mg', 'tablet', 24000, 600),
+('Salonpas Gel', 'tube', 35000, 150),
+('Voltaren Emulgel', 'tube', 75000, 120),
+('Gaviscon Dual Action', 'sachet', 6500, 5),
+('Smecta', 'sachet', 4800, 2000),
+('Otrivin 0.1%', 'bottle', 55000, 8),
+('Tobradex Eyedrops', 'bottle', 58000, 300),
+('Eugica Green', 'capsule', 1200, 6000),
+('Efferalgan Codeine', 'tablet', 4500, 1800),
+('Boganic', 'softgel', 2800, 3500),
+('Maalox', 'tablet', 1500, 2200),
+('Contractubex', 'tube', 185000, 90),
+('Natri Clorid 0.9%', 'bottle', 6000, 1500);
 
 -- THAI
 
@@ -125,29 +125,29 @@ INSERT INTO Prescription (notes, medical_record_id, created_at) VALUES
 GO
 
 INSERT INTO PrescriptionItem (prescription_id, medication_id, dosage_instruction, duration_days, quantity_dispensed) VALUES
-(1, 1, 'Take one tablet daily after meals.', 30, 30),
-(2, 2, 'Take two tablets daily before breakfast.', 60, 120),
-(3, 11, 'Use inhaler as needed for asthma symptoms.', 90, 90),
-(4, 5, 'Take one tablet every night before bed.', 30, 30),
-(3, 6, 'Take one capsule daily in the morning.', 30, 30),
-(1, 3, 'Take one tablet every 8 hours.', 10, 30),
-(2, 4, 'Take one tablet daily after meals.', 30, 30),
-(3, 7, 'Take one tablet every 12 hours.', 15, 30),
-(4, 8, 'Take one tablet daily before breakfast.', 60, 60),
-(1, 9, 'Take one tablet every night before bed.', 30, 30),
-(2, 10, 'Take one tablet daily after meals.', 30, 30),
-(3, 12, 'Take one capsule every 8 hours.', 10, 30),
-(4, 13, 'Take one tablet daily before breakfast.', 60, 60),
-(1, 14, 'Take one tablet every night before bed.', 30, 30),
-(2, 15, 'Take one tablet daily after meals.', 30, 30),
-(3, 16, 'Take one capsule every 8 hours.', 10, 30),
-(4, 17, 'Take one tablet daily before breakfast.', 60, 60),
-(1, 18, 'Take one tablet every night before bed.', 30, 30),
-(2, 19, 'Take one tablet daily after meals.', 30, 30),
-(3, 20, 'Take one capsule every 8 hours.', 10, 30);
+(1, 1, 'Take one daily after meals.', 30, 30),
+(2, 2, 'Take two daily before breakfast.', 60, 120),
+(3, 11, 'Use as needed.', 90, 90),
+(4, 5, 'Take one every night before bed.', 30, 30),
+(3, 6, 'Take one daily in the morning.', 30, 30),
+(1, 3, 'Take one every 8 hours.', 10, 30),
+(2, 4, 'Take one daily after meals.', 30, 30),
+(3, 7, 'Take one every 12 hours.', 15, 30),
+(4, 8, 'Take one daily before breakfast.', 60, 60),
+(1, 9, 'Take one every night before bed.', 30, 30),
+(2, 10, 'Take one daily after meals.', 30, 30),
+(3, 12, 'Take one every 8 hours.', 10, 30),
+(4, 13, 'Take one daily before breakfast.', 60, 60),
+(1, 14, 'Take one every night before bed.', 30, 30),
+(2, 15, 'Take one daily after meals.', 30, 30),
+(3, 16, 'Take one every 8 hours.', 10, 30),
+(4, 17, 'Take one daily before breakfast.', 60, 60),
+(1, 18, 'Take one every night before bed.', 30, 30),
+(2, 19, 'Take one daily after meals.', 30, 30),
+(3, 20, 'Take one every 8 hours.', 10, 30);
 GO
 
---Bui Dang Thinh
+-- THINH
 
 USE HealTrackDB;
 GO
@@ -192,7 +192,7 @@ VALUES
 ('A-301', '2026-06-15', '2026-06-20', 5000000, 1, 8, 5, 4),
 ('A-302', '2026-06-18', NULL, 3000000, 1, 9, 8, 4);
 
---vy
+-- VY
 -- 1. Thêm Khoa
 INSERT INTO dbo.Department (name, location) 
 VALUES (N'Khoa Thần Kinh', N'Tầng 4 - Tòa nhà B');
@@ -272,7 +272,7 @@ VALUES (
     14
 );
 
--- Nam
+-- NAM
 INSERT INTO Department (name, location, head_doctor_id, is_active) VALUES
 (N'Rehabilitation 3', N'Building C - Floor 1', NULL, 1),
 (N'Cardiology 3', N'Building A - Floor 2', NULL, 1),
@@ -358,12 +358,12 @@ INSERT INTO Prescription (notes, medical_record_id, is_active) VALUES
 GO
 
 INSERT INTO PrescriptionItem (prescription_id, medication_id, dosage_instruction, duration_days, quantity_dispensed, is_active) VALUES
-(6, 16, N'Take 1 tablet every 8 hours.', 10, 30, 1),
-(7, 19, N'Take 1 capsule daily in the morning.', 30, 30, 1),
-(8, 14, N'Take 1 tablet after meals.', 30, 30, 1),
-(9, 18, N'Take 1 pill before bedtime.', 14, 14, 1),
-(10, 15, N'Take 2 capsules after lunch and dinner.', 10, 400, 1),
-(10, 17, N'Take 1 tablet in the morning.', 10, 200, 1);
+(6, 16, N'Take 1 every 8 hours.', 10, 30, 1),
+(7, 19, N'Take 1 daily in the morning.', 30, 30, 1),
+(8, 14, N'Take 1 after meals.', 30, 30, 1),
+(9, 18, N'Take 1 before bedtime.', 14, 14, 1),
+(10, 15, N'Take 2 after lunch and dinner.', 10, 400, 1),
+(10, 17, N'Take 1 in the morning.', 10, 200, 1);
 
 INSERT INTO Admission (room, admission_date, discharge_date, cost, patient_id, doctor_id, department_id, is_active) VALUES
 ('R201', '2026-07-01', '2026-07-04', 4500000, 13, 13, 6, 1),
@@ -371,3 +371,54 @@ INSERT INTO Admission (room, admission_date, discharge_date, cost, patient_id, d
 ('Room F103', '2026-07-02', '2026-07-07', 9000000, 21, 20, 7, 1),
 ('101A', '2026-06-01', NULL, NULL, 17, 15, 4, 1),
 ('Room E401', '2026-07-05', NULL, NULL, 20, 21, 10, 1);
+
+-- LINH
+
+INSERT INTO Department (name, location)
+VALUES (N'Cardiology 4', N'Floor 2');
+
+INSERT INTO Doctor (full_name, phone, email, specialization, department_id)
+VALUES 
+(N'Văn Hồng Hải', '0978567458', 'hai@hospital.com', N'Cardiologist', 11),
+(N'Đoàn Thị Mậu', '0976562571', 'mau@hospital.com', N'Cardiologist', 11);
+
+-- Set head doctor
+UPDATE Department
+SET head_doctor_id = 23
+WHERE id = 11;
+
+INSERT INTO Patient (full_name, dob, gender, phone, address, email)
+VALUES 
+(N'Lê Văn Nam', '1990-01-01', 'M', '0987267185', N'Hanoi', 'nam1123@gmail.com'),
+(N'Phạm Thị Dung', '1995-05-05', 'F', '0378912904', N'HCM', 'dung98@gmail.com');
+
+INSERT INTO Appointment (appointment_datetime, reason, status, patient_id, doctor_id)
+VALUES
+('2026-01-01 08:00', N'Checkup', 'upcoming', 25, 23),
+('2026-01-03 09:00', N'Chest pain', 'completed', 26, 23),
+('2026-01-05 10:00', N'Follow-up', 'upcoming', 25, 24);
+
+INSERT INTO MedicalRecord (diagnosis, note, patient_id, doctor_id)
+VALUES
+(N'Flu', N'Mild symptoms', 25, 23),
+(N'Heart issue', N'Needs monitoring', 26, 23),
+(N'Checkup normal', N'All good', 25, 24);
+
+INSERT INTO Prescription (notes, medical_record_id)
+VALUES
+(N'Take after meal', 21),
+(N'Use for 5 days', 22);
+
+
+INSERT INTO PrescriptionItem (prescription_id, medication_id, dosage_instruction, duration_days, quantity_dispensed)
+VALUES
+(11, 5, N'2 tablets/day', 5, 10),
+(11, 7, N'1 tablet/day', 5, 5),
+(12, 6, N'3 capsules/day', 7, 21);
+
+INSERT INTO Admission (room, admission_date, discharge_date, cost, patient_id, doctor_id, department_id)
+VALUES
+('A101', '2026-01-02', NULL, 5000000, 25, 23, 11),
+('A102', '2026-01-03', '2026-01-10', 8000000, 26, 24, 11);
+
+GO

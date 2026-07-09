@@ -3,8 +3,7 @@
 USE HealTrackDB;
 GO
 
--- Q6
--- v
+-- LINH Q6v)
 SELECT 
     d.full_name AS doctor_name,
     dep.name AS department_name,
@@ -17,7 +16,7 @@ LEFT JOIN Appointment a
 GROUP BY d.id, d.full_name, dep.name
 ORDER BY completed_appointments DESC;
 
--- w
+-- LINH Q6w)
 SELECT TOP 3
     dep.name AS department_name,
     COUNT(ad.id) AS total_admissions
@@ -27,7 +26,7 @@ GROUP BY dep.id, dep.name
 HAVING COUNT(ad.id) >= 2
 ORDER BY total_admissions DESC;
 
--- x
+-- LINH Q6x)
 SELECT 
     dep.name AS department_name,
     ROUND(AVG(DATEDIFF(DAY, ad.admission_date, ad.discharge_date) * 1.0), 1) AS avg_stay_days
@@ -37,7 +36,7 @@ WHERE ad.discharge_date IS NOT NULL
 GROUP BY dep.id, dep.name
 HAVING AVG(DATEDIFF(DAY, ad.admission_date, ad.discharge_date)) > 2;
 
--- Q7 z
+-- LINH Q7z)
 SELECT 
     p.full_name AS patient_name,
     SUM(pi.quantity_dispensed * m.price) AS total_cost
