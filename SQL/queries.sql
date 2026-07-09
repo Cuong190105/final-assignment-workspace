@@ -1,31 +1,132 @@
-USE HealTrackDB
+
+-- THINH Q4p) List all patients born before 01/01/1990. Return their personal details and contact information. Order by date of birth, oldest first.
+
+SELECT id, full_name, dob, gender, phone, address, email
+    FROM Patient
+    WHERE dob < '1990-01-01'
+        AND is_active = 1
+    ORDER BY dob ASC;
+
+-- THINH Q4q) List all appointments with a &quot;scheduled/upcoming&quot; status that fall within the next 30 days from today. Show which patient and which doctor each appointment belongs to.
+
+SELECT
+    a.id AS appointment_id,
+    a.appointment_datetime,
+    a.reason,
+    a.status,
+    p.id AS patient_id,
+    p.full_name AS patient_name,
+    d.id AS doctor_id,
+    d.full_name AS doctor_name
+FROM Appointment a
+JOIN Patient p ON a.patient_id = p.id
+JOIN Doctor d ON a.doctor_id = d.id
+WHERE a.status = 'upcoming'
+    AND a.appointment_datetime >= CAST(GETDATE() AS DATETIME)
+    AND a.appointment_datetime < DATEADD(DAY, 30, CAST(GETDATE() AS DATETIME))
+    AND a.is_active = 1
+ORDER BY a.appointment_datetime ASC;
+
+-- THINH Q4r) Show all medications where current stock is below 10 units. Order by stock level ascending.
+
+SELECT id, name, unit, price, stock
+    FROM Medication
+    WHERE stock <10
+        AND is_active = 1
+    ORDER BY stock ASC;
+
+-- VY: Q5s) Danh sách các cuộc hẹn đã hoàn thành
+SELECT 
+    p.full_name AS PatientName, 
+    d.full_name AS DoctorName, 
+    d.specialization, 
+    a.appointment_datetime AS AppointmentDate, 
+    a.reason
+FROM dbo.Appointment a
+JOIN dbo.Patient p ON a.patient_id = p.id
+JOIN dbo.Doctor d ON a.doctor_id = d.id
+WHERE a.status = 'completed'
+ORDER BY a.appointment_datetime DESC;
+
+-- VY: Q5t) Danh sách bệnh nhân đã nhập viện (bao gồm cả trường hợp chưa xuất viện)
+SELECT 
+    p.full_name AS PatientName, 
+    dept.name AS DepartmentName, 
+    d.full_name AS DoctorName, 
+    adm.admission_date, 
+    adm.discharge_date
+FROM dbo.Admission adm
+JOIN dbo.Patient p ON adm.patient_id = p.id
+JOIN dbo.Doctor d ON adm.doctor_id = d.id
+JOIN dbo.Department dept ON adm.department_id = dept.id
+ORDER BY adm.admission_date DESC;
+
+-- VY: Q5u) Chi tiết hồ sơ bệnh án và đơn thuốc (một hàng cho mỗi loại thuốc trong đơn)
+SELECT 
+    p.full_name AS PatientName, 
+    d.full_name AS DoctorName, 
+    mr.created_at AS RecordDate, 
+    mr.diagnosis, 
+    m.name AS MedicationName, 
+    pi.dosage_instruction
+FROM dbo.MedicalRecord mr
+JOIN dbo.Patient p ON mr.patient_id = p.id
+JOIN dbo.Doctor d ON mr.doctor_id = d.id
+JOIN dbo.Prescription pres ON mr.id = pres.medical_record_id
+JOIN dbo.PrescriptionItem pi ON pres.id = pi.prescription_id
+JOIN dbo.Medication m ON pi.medication_id = m.id;
+
+-- THINH Q7y) Find all doctors who have never had any appointment assigned to them. Return their names,specialisations, and departments.
+
+SELECT
+    d.id,
+    d.full_name,
+    d.specialization,
+    dep.name AS department_name
+FROM Doctor d
+JOIN Department dep ON d.department_id = dep.id
+WHERE d.is_active = 1
+    AND NOT EXISTS (
+        SELECT 1
+        FROM Appointment a
+        WHERE a.doctor_id = d.id
+    )
+ORDER BY d.full_name;
+
+-- THAI Q8aa)
+CREATE VIEW ActivePatients
+AS
+SELECT
+    id,
+    full_name,
+    dob,
+    gender,
+    phone,
+    address,
+    email
+FROM Patient
+WHERE is_active = 1;
 GO
 
-USE HealTrackDB;
+-- THAI Q8bb)
+CREATE VIEW DoctorWorkload
+AS
+SELECT
+    d.id,
+    d.full_name,
+    d.specialization,
+    COUNT(a.id) AS TotalAppointments
+FROM Doctor d
+LEFT JOIN Appointment a
+ON d.id = a.doctor_id
+AND a.is_active = 1
+GROUP BY
+    d.id,
+    d.full_name,
+    d.specialization;
 GO
 
-SELECT * FROM Medication;
-
-SELECT * FROM Department;
-
-SELECT * FROM Doctor;
-
-SELECT * FROM Patient;
-
-SELECT * FROM Appointment;
-
-SELECT * FROM MedicalRecord;
-
-SELECT * FROM Prescription;
-
-SELECT * FROM PrescriptionItem;
-
-SELECT * FROM Admission;
-
--- Q9.cc. Scalar Function — Patient Age
--- Tạo hàm nhận mã định danh bệnh nhân (patient.id) và trả về tuổi hiện tại của bệnh nhân đó theo số năm đầy đủ. 
--- Nếu bệnh nhân không tồn tại, trả về giá trị trọng điểm (ví dụ -1).
-
+-- NAM Q9cc)
 CREATE OR ALTER FUNCTION dbo.fn_GetPatientAge (@PatientID INT)
 RETURNS INT
 AS
@@ -51,11 +152,7 @@ END
 SELECT dbo.fn_GetPatientAge(3) AS PatientAge; -- Bệnh nhân có tồn tại
 SELECT dbo.fn_GetPatientAge(99) AS PatientAge; -- Bệnh nhân không tồn tại (Trả về -1)
 
--- Q9.dd. Table-Valued Function — Doctor Schedule
--- Tạo một hàm nhận vào mã định danh bác sĩ (Doctor.id) và phạm vi ngày (từ/đến) (DATETIME)
--- Trả về một bảng chứa tất cả các cuộc hẹn của bác sĩ đó trong phạm vi đã cho. 
--- Mỗi hàng cần hiển thị: ID cuộc hẹn, tên bệnh nhân, ngày/giờ hẹn, lý do và trạng thái.
-
+-- NAM Q9dd)
 CREATE OR ALTER FUNCTION dbo.fn_GetDoctorSchedule (
 	@DoctorID INT,
 	@StartDate DATETIME,
@@ -74,73 +171,76 @@ GO
 
 SELECT * FROM dbo.fn_GetDoctorSchedule(3, '2026-07-01', '2026-07-31');
 
--- Q10.ee. SP — Book Appointment
--- Tạo một stored procedure nhận ID bệnh nhân (PatientID), ID bác sĩ (DoctorID), ngày/giờ hẹn (App_datetime) và lý do (Reason). 
--- Procedure này phải kiểm tra các điều kiện sau:
--- 1. Cả bệnh nhân và bác sĩ đều tồn tại và không bị vô hiệu hóa/xóa tạm thời.
--- 2. Ngày hẹn phải là ngày trong tương lai.
--- 3. Bác sĩ không có cuộc hẹn nào khác vào cùng ngày và giờ đó.
--- 4. Nếu bất kỳ kiểm tra nào thất bại, hãy báo lỗi với thông báo rõ ràng và mô tả chi tiết. 
--- Khi thành công, hãy thêm cuộc hẹn và trả về ID cuộc hẹn mới.
-
-CREATE OR ALTER PROCEDURE dbo.sp_BookAppointment
-	@PatientID INT,
-	@DoctorID INT,
-	@AppointmentDatetime DATETIME,
-	@Reason VARCHAR(255)
+-- THAI Q10ee)
+CREATE PROCEDURE BookAppointment
+    @AppointmentDateTime DATETIME,
+    @Reason NVARCHAR(255),
+    @PatientID INT,
+    @DoctorID INT
 AS
 BEGIN
-	SET NOCOUNT ON;
+    SET NOCOUNT ON;
 
-	-- Kiểm tra bệnh nhân tồn tại
-	IF NOT EXISTS (SELECT 1 FROM dbo.Patient WHERE id = @PatientID AND is_active = 1)
-	BEGIN 
-		RAISERROR(N'Lỗi 1: Bệnh nhân không tồn tại hoặc đã bị ngừng hoạt động.', 16, 1);
+    IF NOT EXISTS (
+        SELECT 1 FROM Patient
+        WHERE id = @PatientID
+        AND is_active = 1
+    )
+    BEGIN
+        RAISERROR('Patient does not exist or is inactive.',16,1);
         RETURN;
-	END
+    END
 
-	-- Kiểm tra bác sĩ tồn tại
-	IF NOT EXISTS (SELECT 1 FROM dbo.Doctor WHERE id = @DoctorID AND is_active = 1)
-	BEGIN 
-		RAISERROR(N'Lỗi 1: Bác sĩ không tồn tại hoặc đã bị ngừng hoạt động.', 16, 1);
+    IF NOT EXISTS (
+        SELECT 1 FROM Doctor
+        WHERE id = @DoctorID
+        AND is_active = 1
+    )
+    BEGIN
+        RAISERROR('Doctor does not exist or is inactive.',16,1);
         RETURN;
-	END
+    END
 
-	-- Kiểm tra ngày hẹn
-	IF @AppointmentDatetime <= GETDATE()
-	BEGIN
-		RAISERROR(N'Lỗi 2: Ngày hẹn phải là ngày tương lai.', 16, 1);
+    IF @AppointmentDateTime <= GETDATE()
+    BEGIN
+        RAISERROR('Appointment must be in the future.',16,1);
         RETURN;
-	END
+    END
 
-	-- Kiểm tra lịch hẹn của bác sĩ
-	IF EXISTS (SELECT 1 FROM dbo.Appointment 
-				WHERE doctor_id = @DoctorID 
-					AND appointment_datetime = @AppointmentDatetime
-					AND status <> 'cancelled'
-					AND is_active = 1
-				)
-	BEGIN 
-		RAISERROR(N'Lỗi 3: Bác sĩ đã có hẹn trong khoảng thời gian này', 16, 1);
+    IF EXISTS (
+        SELECT 1
+        FROM Appointment
+        WHERE doctor_id=@DoctorID
+        AND appointment_datetime=@AppointmentDateTime
+        AND is_active=1
+    )
+    BEGIN
+        RAISERROR('Doctor already has an appointment at this time.',16,1);
         RETURN;
-	END
+    END
 
-	INSERT INTO Appointment (appointment_datetime, reason, status, patient_id, doctor_id, is_active)
-	VALUES (@AppointmentDatetime, @Reason, 'upcoming', @PatientID, @DoctorID, 1)
+    INSERT INTO Appointment
+    (
+        appointment_datetime,
+        reason,
+        status,
+        patient_id,
+        doctor_id
+    )
+    VALUES
+    (
+        @AppointmentDateTime,
+        @Reason,
+        'upcoming',
+        @PatientID,
+        @DoctorID
+    );
 
-	SELECT SCOPE_IDENTITY() AS NewAppointmentID
+    PRINT 'Appointment booked successfully.';
 END;
 GO
 
-EXEC dbo.sp_BookAppointment @PatientID = 1, @DoctorID = 1, @AppointmentDateTime = '2026-08-15 09:00:00', @Reason = N'Khám lại khớp gối';
-
--- Q10.ff. SP - Discharge Patient
--- Tạo một SP để đánh dấu một ca nhập viện là đã xuất viện, nhận mã số nhập viện (AdmissionID) và tổng chi phí (TotalCost), sau đó:
--- 1. Kiểm tra xem hồ sơ nhập viện có tồn tại hay không.
--- 2. Kiểm tra xem bệnh nhân đã xuất viện hay chưa.
--- 3. Kiểm tra xem tổng chi phí có phải là giá trị dương hay không.
--- Nếu thành công, đặt ngày xuất viện thành ngày/giờ hiện tại và ghi lại tổng chi phí.
-
+-- NAM Q10ff)
 CREATE OR ALTER PROCEDURE dbo.sp_DischargePatient
 	@AdmissionID INT,
 	@TotalCost BIGINT
@@ -179,3 +279,44 @@ END;
 GO
 
 EXEC dbo.sp_DischargePatient @AdmissionID = 4, @TotalCost = 6200000;
+
+-- CUONG Q11
+-- PREPARE PROCEDURE
+CREATE OR ALTER PROCEDURE InsertMedicalRecordWithPrescription
+AS
+BEGIN
+    BEGIN TRANSACTION;
+    BEGIN TRY
+        INSERT INTO MedicalRecord (diagnosis, note, patient_id, doctor_id) VALUES
+        ('Hypertension', 'Patient shows elevated blood pressure.', 1, 1);
+        DECLARE @record_id INT;
+        SELECT TOP 1 @record_id = id FROM MedicalRecord ORDER BY id DESC;
+        -- Hoac dung: DECLARE @record_id INT = SCOPE_IDENTITY();
+
+        INSERT INTO Prescription (notes, medical_record_id) VALUES
+        ('Take medication as prescribed.', @record_id);
+        DECLARE @prescription_id INT;
+        SELECT TOP 1 @prescription_id = id FROM Prescription ORDER BY id DESC;
+
+        INSERT INTO PrescriptionItem (prescription_id, medication_id, dosage_instruction, duration_days, quantity_dispensed) VALUES
+        (@prescription_id, 1, 'Take one tablet daily after meals.', 30, 30),
+        (@prescription_id, 2, 'Take two capsules daily before bedtime.', 15, 30);
+
+        UPDATE Medication SET stock = stock - 30 WHERE id = 1;
+        UPDATE Medication SET stock = stock - 30 WHERE id = 2;
+        COMMIT TRANSACTION;
+        PRINT 'Medical record and prescription inserted successfully.';
+    END TRY
+    BEGIN CATCH
+        ROLLBACK TRANSACTION;
+        THROW 50001, 'Stock levels are insufficient.', 1;
+    END CATCH;
+END;
+
+-- SETUP SUCCESS RUN
+UPDATE Medication SET stock = 1000 WHERE id IN (1, 2);
+EXEC InsertMedicalRecordWithPrescription;
+
+-- SETUP FAILURE RUN
+UPDATE Medication SET stock = 20 WHERE id = 2;
+EXEC InsertMedicalRecordWithPrescription;
