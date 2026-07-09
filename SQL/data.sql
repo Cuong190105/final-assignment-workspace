@@ -117,6 +117,36 @@ INSERT INTO Admission (room, admission_date, discharge_date, cost, patient_id, d
 ('102A', '2026-07-03', NULL, NULL, 2, 3, 1);
 GO
 
+INSERT INTO Prescription (notes, medical_record_id, created_at) VALUES
+('Revisit after 1 month.', 4, '2025-06-01'),
+('Eat less fatty foods.', 5, '2025-09-02'),
+('Exercise regularly.', 6, '2026-01-04'),
+('Take medication as prescribed.', 8, '2026-04-09');
+GO
+
+INSERT INTO PrescriptionItem (prescription_id, medication_id, dosage_instruction, duration_days, quantity_dispensed) VALUES
+(1, 1, 'Take one tablet daily after meals.', 30, 30),
+(2, 2, 'Take two tablets daily before breakfast.', 60, 120),
+(3, 11, 'Use inhaler as needed for asthma symptoms.', 90, 90),
+(4, 5, 'Take one tablet every night before bed.', 30, 30),
+(3, 6, 'Take one capsule daily in the morning.', 30, 30),
+(1, 3, 'Take one tablet every 8 hours.', 10, 30),
+(2, 4, 'Take one tablet daily after meals.', 30, 30),
+(3, 7, 'Take one tablet every 12 hours.', 15, 30),
+(4, 8, 'Take one tablet daily before breakfast.', 60, 60),
+(1, 9, 'Take one tablet every night before bed.', 30, 30),
+(2, 10, 'Take one tablet daily after meals.', 30, 30),
+(3, 12, 'Take one capsule every 8 hours.', 10, 30),
+(4, 13, 'Take one tablet daily before breakfast.', 60, 60),
+(1, 14, 'Take one tablet every night before bed.', 30, 30),
+(2, 15, 'Take one tablet daily after meals.', 30, 30),
+(3, 16, 'Take one capsule every 8 hours.', 10, 30),
+(4, 17, 'Take one tablet daily before breakfast.', 60, 60),
+(1, 18, 'Take one tablet every night before bed.', 30, 30),
+(2, 19, 'Take one tablet daily after meals.', 30, 30),
+(3, 20, 'Take one capsule every 8 hours.', 10, 30);
+GO
+
 --Bui Dang Thinh
 
 USE HealTrackDB;
@@ -162,34 +192,82 @@ VALUES
 ('A-301', '2026-06-15', '2026-06-20', 5000000, 1, 8, 5, 4),
 ('A-302', '2026-06-18', NULL, 3000000, 1, 9, 8, 4);
 
--- SELF HANDLE
+--vy
+-- 1. Thêm Khoa
+INSERT INTO dbo.Department (name, location) 
+VALUES (N'Khoa Thần Kinh', N'Tầng 4 - Tòa nhà B');
 
-INSERT INTO Prescription (notes, medical_record_id, created_at) VALUES
-('Revisit after 1 month.', 4, '2025-06-01'),
-('Eat less fatty foods.', 5, '2025-09-02'),
-('Exercise regularly.', 6, '2026-01-04'),
-('Take medication as prescribed.', 8, '2026-04-09');
-GO
+-- 2. Thêm Bác sĩ 
+INSERT INTO dbo.Doctor (full_name, phone, email, specialization, department_id)
+VALUES (N'Đỗ Nhật Minh', '0912444555', 'minh.dn@hospital.com', N'Phẫu thuật não', 
+       (SELECT id FROM dbo.Department WHERE name = N'Khoa Thần Kinh')),
+       (N'Vũ Thị Lan Anh', '0912666777', 'lananh.vt@hospital.com', N'Điều trị rối loạn giấc ngủ', 
+       (SELECT id FROM dbo.Department WHERE name = N'Khoa Thần Kinh'));
 
-INSERT INTO PrescriptionItem (prescription_id, medication_id, dosage_instruction, duration_days, quantity_dispensed) VALUES
-(1, 1, 'Take one tablet daily after meals.', 30, 30),
-(2, 2, 'Take two tablets daily before breakfast.', 60, 120),
-(3, 11, 'Use inhaler as needed for asthma symptoms.', 90, 90),
-(4, 5, 'Take one tablet every night before bed.', 30, 30),
-(3, 6, 'Take one capsule daily in the morning.', 30, 30),
-(1, 3, 'Take one tablet every 8 hours.', 10, 30),
-(2, 4, 'Take one tablet daily after meals.', 30, 30),
-(3, 7, 'Take one tablet every 12 hours.', 15, 30),
-(4, 8, 'Take one tablet daily before breakfast.', 60, 60),
-(1, 9, 'Take one tablet every night before bed.', 30, 30),
-(2, 10, 'Take one tablet daily after meals.', 30, 30),
-(3, 12, 'Take one capsule every 8 hours.', 10, 30),
-(4, 13, 'Take one tablet daily before breakfast.', 60, 60),
-(1, 14, 'Take one tablet every night before bed.', 30, 30),
-(2, 15, 'Take one tablet daily after meals.', 30, 30),
-(3, 16, 'Take one capsule every 8 hours.', 10, 30),
-(4, 17, 'Take one tablet daily before breakfast.', 60, 60),
-(1, 18, 'Take one tablet every night before bed.', 30, 30),
-(2, 19, 'Take one tablet daily after meals.', 30, 30),
-(3, 20, 'Take one capsule every 8 hours.', 10, 30);
-GO
+INSERT INTO dbo.Doctor (full_name, phone, email, specialization, department_id)
+VALUES (N'Trần Minh Tuấn', '0988777666', 'tuan.tm@hospital.com', N'Nội thần kinh', 
+       (SELECT id FROM dbo.Department WHERE name = N'Khoa Thần Kinh'));
+
+-- 3. Cập nhật Head Doctor 
+UPDATE dbo.Department 
+SET head_doctor_id = (SELECT id FROM dbo.Doctor WHERE full_name = N'Đỗ Nhật Minh')
+WHERE name = N'Khoa Thần Kinh';
+
+-- 4. Thêm Bệnh nhân
+INSERT INTO dbo.Patient (full_name, dob, gender, phone, address, email)
+VALUES (N'Lương Thế Vinh', '1975-09-09', 'M', '0988111222', N'Bắc Giang', 'vinh.luong@gmail.com'),
+       (N'Mai Thu Huyền', '1989-11-20', 'F', '0988333444', N'Ninh Bình', 'huyen.mai@outlook.com');
+       
+INSERT INTO dbo.Patient (full_name, dob, gender, phone, address, email)
+VALUES (N'Nguyễn Văn An', '1990-05-15', 'M', '0911222333', N'Hà Nội', 'an.nguyen@gmail.com');
+
+-- 5. Thêm Cuộc hẹn 
+INSERT INTO dbo.Appointment (appointment_datetime, reason, status, patient_id, doctor_id)
+VALUES ('2026-08-05 08:00:00', N'Đau nửa đầu kéo dài', 'upcoming', 
+       (SELECT id FROM dbo.Patient WHERE full_name = N'Lương Thế Vinh'), 
+       (SELECT id FROM dbo.Doctor WHERE full_name = N'Đỗ Nhật Minh'));
+
+INSERT INTO dbo.Appointment (appointment_datetime, reason, status, patient_id, doctor_id)
+VALUES ('2026-07-08 10:00:00', N'Kiểm tra định kỳ', 'completed', 
+       (SELECT id FROM dbo.Patient WHERE full_name = N'Nguyễn Văn An'), 
+       (SELECT id FROM dbo.Doctor WHERE full_name = N'Trần Minh Tuấn'));
+
+INSERT INTO dbo.Admission (room, admission_date, discharge_date, cost, patient_id, doctor_id, department_id)
+VALUES (
+    'A101', 
+    GETDATE(),            -- Lấy ngày hôm nay (09/07/2026)
+    NULL,                 -- Bệnh nhân đang nằm viện nên chưa có ngày xuất viện
+    1500000, 
+    (SELECT TOP 1 id FROM dbo.Patient), 
+    (SELECT TOP 1 id FROM dbo.Doctor), 
+    (SELECT TOP 1 id FROM dbo.Department)
+);
+INSERT INTO dbo.MedicalRecord (patient_id, doctor_id, diagnosis, note)
+VALUES 
+(
+    (SELECT id FROM dbo.Patient WHERE full_name = N'Nguyễn Văn An'),
+    (SELECT id FROM dbo.Doctor WHERE full_name = N'Trần Minh Tuấn'),
+    N'Viêm họng cấp',
+    N'Đau họng, sốt nhẹ, soi họng thấy sưng đỏ.'
+),
+(
+    (SELECT id FROM dbo.Patient WHERE full_name = N'Mai Thu Huyền'),
+    (SELECT id FROM dbo.Doctor WHERE full_name = N'Vũ Thị Lan Anh'),
+    N'Mất ngủ mãn tính',
+    N'Bệnh nhân không ngủ được quá 4 tiếng/đêm.'
+);
+INSERT INTO dbo.Prescription (medical_record_id, notes, created_at)
+VALUES (
+    (SELECT TOP 1 id FROM dbo.MedicalRecord ORDER BY created_at DESC), 
+    N'Đơn thuốc điều trị đau đầu', 
+    SYSDATETIME()
+);
+
+INSERT INTO dbo.PrescriptionItem (prescription_id, medication_id, dosage_instruction, duration_days, quantity_dispensed)
+VALUES (
+    (SELECT TOP 1 id FROM dbo.Prescription ORDER BY created_at DESC), 
+    1, 
+    N'Uống 1 viên sau ăn, 2 lần/ngày', 
+    7, 
+    14
+);
