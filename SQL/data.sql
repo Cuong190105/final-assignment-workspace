@@ -4,26 +4,26 @@ GO
 -- DEFAULT DATA
 
 INSERT INTO Medication (name, unit, price, stock) VALUES
-('Paracetamol', 'mg', 500, 1000),
-('Amoxicillin', 'mg', 1000, 500),
-('Ibuprofen', 'mg', 800, 300),
-('Metformin', 'mg', 1200, 200),
-('Atorvastatin', 'mg', 1500, 150),
-('Omeprazole', 'mg', 700, 400),
-('Amlodipine', 'mg', 900, 250),
-('Losartan', 'mg', 1100, 350),
-('Simvastatin', 'mg', 1300, 180),
-('Levothyroxine', 'mg', 1400, 220),
-('Albuterol', 'mg', 600, 300),
-('Gabapentin', 'mg', 1000, 200),
-('Hydrochlorothiazide', 'mg', 800, 400),
-('Citalopram', 'mg', 1200, 150),
-('Sertraline', 'mg', 1300, 250),
-('Furosemide', 'mg', 900, 350),
-('Clopidogrel', 'mg', 1100, 180),
-('Warfarin', 'mg', 1400, 220),
-('Prednisone', 'mg', 1000, 300),
-('Tramadol', 'mg', 1200, 200);
+("Paracetamol 500mg", "tablet", 1200, 5000),
+("Amoxicillin 500mg", "capsule", 2500, 3000),
+("Ibuprofen 400mg", "tablet", 1800, 2500),
+("Panadol Extra", "tablet", 2200, 4000),
+("Berberin", "tablet", 500, 10000),
+("Cephalexin 500mg", "capsule", 3000, 1500),
+("Augmentin 1g", "tablet", 18500, 800),
+("Nexium 40mg", "tablet", 24000, 600),
+("Salonpas Gel", "tube", 35000, 150),
+("Voltaren Emulgel", "tube", 75000, 120),
+("Gaviscon Dual Action", "sachet", 6500, 5),
+("Smecta", "sachet", 4800, 2000),
+("Otrivin 0.1%", "bottle", 55000, 8),
+("Tobradex Eyedrops", "bottle", 58000, 300),
+("Eugica Green", "capsule", 1200, 6000),
+("Efferalgan Codeine", "tablet", 4500, 1800),
+("Boganic", "softgel", 2800, 3500),
+("Maalox", "tablet", 1500, 2200),
+("Contractubex", "tube", 185000, 90),
+("Natri Clorid 0.9%", "bottle", 6000, 1500);
 
 -- THAI
 

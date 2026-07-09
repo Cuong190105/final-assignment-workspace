@@ -1,47 +1,5 @@
 
--- s) Danh sách các cuộc hẹn đã hoàn thành
-SELECT 
-    p.full_name AS PatientName, 
-    d.full_name AS DoctorName, 
-    d.specialization, 
-    a.appointment_datetime AS AppointmentDate, 
-    a.reason
-FROM dbo.Appointment a
-JOIN dbo.Patient p ON a.patient_id = p.id
-JOIN dbo.Doctor d ON a.doctor_id = d.id
-WHERE a.status = 'completed'
-ORDER BY a.appointment_datetime DESC;
-
--- t) Danh sách bệnh nhân đã nhập viện (bao gồm cả trường hợp chưa xuất viện)
-SELECT 
-    p.full_name AS PatientName, 
-    dept.name AS DepartmentName, 
-    d.full_name AS DoctorName, 
-    adm.admission_date, 
-    adm.discharge_date
-FROM dbo.Admission adm
-JOIN dbo.Patient p ON adm.patient_id = p.id
-JOIN dbo.Doctor d ON adm.doctor_id = d.id
-JOIN dbo.Department dept ON adm.department_id = dept.id
-ORDER BY adm.admission_date DESC;
-
--- u) Chi tiết hồ sơ bệnh án và đơn thuốc (một hàng cho mỗi loại thuốc trong đơn)
-SELECT 
-    p.full_name AS PatientName, 
-    d.full_name AS DoctorName, 
-    mr.created_at AS RecordDate, 
-    mr.diagnosis, 
-    m.name AS MedicationName, 
-    pi.dosage_instruction
-FROM dbo.MedicalRecord mr
-JOIN dbo.Patient p ON mr.patient_id = p.id
-JOIN dbo.Doctor d ON mr.doctor_id = d.id
-JOIN dbo.Prescription pres ON mr.id = pres.medical_record_id
-JOIN dbo.PrescriptionItem pi ON pres.id = pi.prescription_id
-JOIN dbo.Medication m ON pi.medication_id = m.id;
--- Bui Dang Thinh
--- Q4
--- p) List all patients born before 01/01/1990. Return their personal details and contact information. Order by date of birth, oldest first.
+-- THINH Q4p) List all patients born before 01/01/1990. Return their personal details and contact information. Order by date of birth, oldest first.
 
 SELECT id, full_name, dob, gender, phone, address, email
     FROM Patient
@@ -49,7 +7,7 @@ SELECT id, full_name, dob, gender, phone, address, email
         AND is_active = 1
     ORDER BY dob ASC;
 
--- q) List all appointments with a &quot;scheduled/upcoming&quot; status that fall within the next 30 days from today. Show which patient and which doctor each appointment belongs to.
+-- THINH Q4q) List all appointments with a &quot;scheduled/upcoming&quot; status that fall within the next 30 days from today. Show which patient and which doctor each appointment belongs to.
 
 SELECT
     a.id AS appointment_id,
@@ -69,7 +27,7 @@ WHERE a.status = 'upcoming'
     AND a.is_active = 1
 ORDER BY a.appointment_datetime ASC;
 
--- r) Show all medications where current stock is below 10 units. Order by stock level ascending.
+-- THINH Q4r) Show all medications where current stock is below 10 units. Order by stock level ascending.
 
 SELECT id, name, unit, price, stock
     FROM Medication
@@ -77,9 +35,48 @@ SELECT id, name, unit, price, stock
         AND is_active = 1
     ORDER BY stock ASC;
 
+-- VY: Q5s) Danh sách các cuộc hẹn đã hoàn thành
+SELECT 
+    p.full_name AS PatientName, 
+    d.full_name AS DoctorName, 
+    d.specialization, 
+    a.appointment_datetime AS AppointmentDate, 
+    a.reason
+FROM dbo.Appointment a
+JOIN dbo.Patient p ON a.patient_id = p.id
+JOIN dbo.Doctor d ON a.doctor_id = d.id
+WHERE a.status = 'completed'
+ORDER BY a.appointment_datetime DESC;
 
--- Q7
--- y) Find all doctors who have never had any appointment assigned to them. Return their names,specialisations, and departments.
+-- VY: Q5t) Danh sách bệnh nhân đã nhập viện (bao gồm cả trường hợp chưa xuất viện)
+SELECT 
+    p.full_name AS PatientName, 
+    dept.name AS DepartmentName, 
+    d.full_name AS DoctorName, 
+    adm.admission_date, 
+    adm.discharge_date
+FROM dbo.Admission adm
+JOIN dbo.Patient p ON adm.patient_id = p.id
+JOIN dbo.Doctor d ON adm.doctor_id = d.id
+JOIN dbo.Department dept ON adm.department_id = dept.id
+ORDER BY adm.admission_date DESC;
+
+-- VY: Q5u) Chi tiết hồ sơ bệnh án và đơn thuốc (một hàng cho mỗi loại thuốc trong đơn)
+SELECT 
+    p.full_name AS PatientName, 
+    d.full_name AS DoctorName, 
+    mr.created_at AS RecordDate, 
+    mr.diagnosis, 
+    m.name AS MedicationName, 
+    pi.dosage_instruction
+FROM dbo.MedicalRecord mr
+JOIN dbo.Patient p ON mr.patient_id = p.id
+JOIN dbo.Doctor d ON mr.doctor_id = d.id
+JOIN dbo.Prescription pres ON mr.id = pres.medical_record_id
+JOIN dbo.PrescriptionItem pi ON pres.id = pi.prescription_id
+JOIN dbo.Medication m ON pi.medication_id = m.id;
+
+-- THINH Q7y) Find all doctors who have never had any appointment assigned to them. Return their names,specialisations, and departments.
 
 SELECT
     d.id,
@@ -95,8 +92,110 @@ WHERE d.is_active = 1
         WHERE a.doctor_id = d.id
     )
 ORDER BY d.full_name;
--- ==== Cuong
--- Q11
+
+-- THAI Q8aa)
+CREATE VIEW ActivePatients
+AS
+SELECT
+    id,
+    full_name,
+    dob,
+    gender,
+    phone,
+    address,
+    email
+FROM Patient
+WHERE is_active = 1;
+GO
+
+-- THAI Q8bb)
+CREATE VIEW DoctorWorkload
+AS
+SELECT
+    d.id,
+    d.full_name,
+    d.specialization,
+    COUNT(a.id) AS TotalAppointments
+FROM Doctor d
+LEFT JOIN Appointment a
+ON d.id = a.doctor_id
+AND a.is_active = 1
+GROUP BY
+    d.id,
+    d.full_name,
+    d.specialization;
+GO
+
+-- THAI Q10ee)
+CREATE PROCEDURE BookAppointment
+    @AppointmentDateTime DATETIME,
+    @Reason NVARCHAR(255),
+    @PatientID INT,
+    @DoctorID INT
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    IF NOT EXISTS (
+        SELECT 1 FROM Patient
+        WHERE id = @PatientID
+        AND is_active = 1
+    )
+    BEGIN
+        RAISERROR('Patient does not exist or is inactive.',16,1);
+        RETURN;
+    END
+
+    IF NOT EXISTS (
+        SELECT 1 FROM Doctor
+        WHERE id = @DoctorID
+        AND is_active = 1
+    )
+    BEGIN
+        RAISERROR('Doctor does not exist or is inactive.',16,1);
+        RETURN;
+    END
+
+    IF @AppointmentDateTime <= GETDATE()
+    BEGIN
+        RAISERROR('Appointment must be in the future.',16,1);
+        RETURN;
+    END
+
+    IF EXISTS (
+        SELECT 1
+        FROM Appointment
+        WHERE doctor_id=@DoctorID
+        AND appointment_datetime=@AppointmentDateTime
+        AND is_active=1
+    )
+    BEGIN
+        RAISERROR('Doctor already has an appointment at this time.',16,1);
+        RETURN;
+    END
+
+    INSERT INTO Appointment
+    (
+        appointment_datetime,
+        reason,
+        status,
+        patient_id,
+        doctor_id
+    )
+    VALUES
+    (
+        @AppointmentDateTime,
+        @Reason,
+        'upcoming',
+        @PatientID,
+        @DoctorID
+    );
+
+    PRINT 'Appointment booked successfully.';
+END;
+GO
+
+-- CUONG Q11
 -- PREPARE PROCEDURE
 CREATE OR ALTER PROCEDURE InsertMedicalRecordWithPrescription
 AS
@@ -121,6 +220,7 @@ BEGIN
         UPDATE Medication SET stock = stock - 30 WHERE id = 1;
         UPDATE Medication SET stock = stock - 30 WHERE id = 2;
         COMMIT TRANSACTION;
+        PRINT 'Medical record and prescription inserted successfully.';
     END TRY
     BEGIN CATCH
         ROLLBACK TRANSACTION;
