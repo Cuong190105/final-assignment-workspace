@@ -1,6 +1,8 @@
 USE HealTrackDB;
 GO
 
+-- DEFAULT DATA
+
 INSERT INTO Medication (name, unit, price, stock) VALUES
 ('Paracetamol', 'mg', 500, 1000),
 ('Amoxicillin', 'mg', 1000, 500),
@@ -22,6 +24,8 @@ INSERT INTO Medication (name, unit, price, stock) VALUES
 ('Warfarin', 'mg', 1400, 220),
 ('Prednisone', 'mg', 1000, 300),
 ('Tramadol', 'mg', 1200, 200);
+
+-- THAI
 
 INSERT INTO Department (name, location)
 VALUES
@@ -58,6 +62,8 @@ VALUES
 ('R201', '2026-07-15', '2026-07-18', 4500000, 1, 1, 1),
 ('R205', '2026-07-16', NULL, NULL, 2, 2, 1);
 GO
+
+-- CUONG
 
 INSERT INTO Patient (full_name, dob, gender, phone, address, email) VALUES
 ('John Doe', '1980-05-15', 'M', '555-1234', '123 Elm St', 'johndoe@example.com'),
