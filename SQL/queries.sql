@@ -126,6 +126,51 @@ GROUP BY
     d.specialization;
 GO
 
+-- NAM Q9cc)
+CREATE OR ALTER FUNCTION dbo.fn_GetPatientAge (@PatientID INT)
+RETURNS INT
+AS
+BEGIN
+	DECLARE @age INT;
+	
+	-- Kiểm tra tồn tại
+	IF NOT EXISTS (SELECT 1 FROM dbo.Patient WHERE id = @PatientID) -- Không tồn tại. Trả về -1
+	BEGIN
+		SET @age = -1;
+	END
+	ELSE -- Có tồn tại. Trả về tuổi tính theo năm
+	BEGIN
+		SELECT @age = DATEDIFF(YEAR, dob, GETDATE())
+		FROM dbo.Patient
+		WHERE id = @PatientID;
+
+	END
+
+	RETURN @age;
+END
+
+SELECT dbo.fn_GetPatientAge(3) AS PatientAge; -- Bệnh nhân có tồn tại
+SELECT dbo.fn_GetPatientAge(99) AS PatientAge; -- Bệnh nhân không tồn tại (Trả về -1)
+
+-- NAM Q9dd)
+CREATE OR ALTER FUNCTION dbo.fn_GetDoctorSchedule (
+	@DoctorID INT,
+	@StartDate DATETIME,
+	@EndDate DATETIME
+)
+RETURNS TABLE
+AS
+RETURN (
+	SELECT AP.id AS AppointmentID, P.full_name AS PatientName, AP.appointment_datetime AS Date, AP.reason AS Reason, AP.status
+	FROM dbo.Appointment AP JOIN dbo.Patient P ON P.id = AP.patient_id
+	WHERE AP.doctor_id = @DoctorID
+		AND AP.appointment_datetime BETWEEN @StartDate AND @EndDate
+		AND AP.is_active = 1
+);
+GO
+
+SELECT * FROM dbo.fn_GetDoctorSchedule(3, '2026-07-01', '2026-07-31');
+
 -- THAI Q10ee)
 CREATE PROCEDURE BookAppointment
     @AppointmentDateTime DATETIME,
@@ -194,6 +239,46 @@ BEGIN
     PRINT 'Appointment booked successfully.';
 END;
 GO
+
+-- NAM Q10ff)
+CREATE OR ALTER PROCEDURE dbo.sp_DischargePatient
+	@AdmissionID INT,
+	@TotalCost BIGINT
+AS
+BEGIN
+	SET NOCOUNT ON;
+
+	-- Kiểm tra hồ sơ
+	IF NOT EXISTS (SELECT 1 FROM dbo.Admission WHERE id = @AdmissionID)
+	BEGIN
+		RAISERROR (N'Lỗi: Hồ sơ nhập viện không tồn tại', 16, 1);
+		RETURN;
+	END
+
+	-- Kiểm tra xuất viện
+	IF EXISTS (SELECT 1 FROM dbo.Admission WHERE id = @AdmissionID AND discharge_date IS NOT NULL)
+	BEGIN
+		RAISERROR (N'Lỗi: Bệnh nhân trong hồ sơ đã xuất viện', 16, 1);
+		RETURN;
+	END
+
+	IF @TotalCost < 0
+	BEGIN 
+		RAISERROR (N'Lỗi: Tổng chi phí phải là số dương (lớn hơn 0)', 16, 1);
+		RETURN;
+	END
+
+	-- Cập nhật lại hồ sơ
+	UPDATE Admission
+	SET discharge_date = CAST(GETDATE() AS DATE),
+		cost = @TotalCost
+	WHERE id = @AdmissionID;
+
+	SELECT * FROM dbo.Admission WHERE id = @AdmissionID;
+END;
+GO
+
+EXEC dbo.sp_DischargePatient @AdmissionID = 4, @TotalCost = 6200000;
 
 -- CUONG Q11
 -- PREPARE PROCEDURE

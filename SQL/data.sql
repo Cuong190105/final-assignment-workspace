@@ -271,3 +271,103 @@ VALUES (
     7, 
     14
 );
+
+-- Nam
+INSERT INTO Department (name, location, head_doctor_id, is_active) VALUES
+(N'Rehabilitation 3', N'Building C - Floor 1', NULL, 1),
+(N'Cardiology 3', N'Building A - Floor 2', NULL, 1),
+(N'Neurology 3', N'Building B - Floor 3', NULL, 1),
+(N'Orthopedics 3', N'Building F - Floor 1', NULL, 1),
+(N'Oncology 3', N'Building E - Floor 4', NULL, 1);
+GO
+
+INSERT INTO Doctor (full_name, phone, email, specialization, department_id, is_active) VALUES
+(N'Phạm Minh Khang', '0908111222', 'khang.pm@hospital.com', N'Physical Rehabilitation', 6, 1),
+(N'Hoàng Gia Bảo', '0908333444', 'bao.hg@hospital.com', N'Sports Medicine', 6, 1),
+(N'Dr. Emily Carter', '555-1111', 'emily.carter@example.com', 'Cardiologist', 7, 1),
+(N'John Smith', '0901234567', 'john.smith@healtrack.com', 'Cardiac Surgeon', 7, 1),
+(N'Dr. Michael Thompson', '555-2222', 'michael.thompson@example.com', 'Neurologist', 8, 1),
+(N'Dr. Sarah Lee', '555-3333', 'sarah.lee@example.com', 'Pediatric Neurologist', 8, 1),
+(N'Hà Triệu Hoan', '0955333444', 'hoan.ht@healtrack.com', N'Orthopedic Surgeon', 9, 1),
+(N'Vũ Hoàng Long', '0955777888', 'long.vh@healtrack.com', N'Orthopedic Specialist', 9, 1),
+(N'Lưu Tiến Dũng', '0955111222', 'dung.lt@healtrack.com', N'Oncologist', 10, 1),
+(N'Nguyễn Xuân Sơn', '0955222333', 'son.nx@healtrack.com', N'Surgical Oncologist', 10, 1);
+GO
+
+UPDATE Department SET head_doctor_id = 13 WHERE id = 6; 
+UPDATE Department SET head_doctor_id = 15 WHERE id = 7; 
+UPDATE Department SET head_doctor_id = 17 WHERE id = 8; 
+UPDATE Department SET head_doctor_id = 19 WHERE id = 9; 
+UPDATE Department SET head_doctor_id = 21 WHERE id = 10; 
+GO
+
+INSERT INTO Patient (full_name, dob, gender, phone, address, email, is_active) VALUES
+(N'Bùi Ngọc Anh', '1998-04-18', 'F', '0911222333', N'Hai Phong', 'ngocanh98@gmail.com', 1),
+(N'Đặng Quốc Huy', '2000-09-25', 'M', '0911444555', N'Quang Ninh', 'quochuy00@gmail.com', 1),
+(N'John Doe', '1980-05-15', 'M', '555-1234', N'123 Elm St', 'johndoe@example.com', 1),
+(N'Jane Smith', '1988-08-22', 'F', '555-5678', N'456 Oak St', 'janesmith@example.com', 1), 
+(N'Michael Brown', '1985-04-12', 'M', '0911223344', N'123 Main Street', 'michael.brown@gmail.com', 1),
+(N'Sarah Davis', '1992-09-25', 'F', '0922334455', N'456 Second Ave', 'sarah.davis@gmail.com', 1),
+(N'Nguyễn Bá Tùng', '1975-04-12', 'M', '0977000001', N'Đống Đa, Hà Nội', 'tung.nb75@gmail.com', 1),
+(N'Lê Minh Châu', '1982-08-24', 'F', '0977000002', N'Cầu Giấy, Hà Nội', 'chau.lm82@gmail.com', 1),
+(N'Trần Văn Hùng', '1965-03-14', 'M', '0977000003', N'Ba Đình, Hà Nội', 'hung.tv65@gmail.com', 1),
+(N'Phạm Hải Yến', '2005-11-12', 'F', '0977000004', N'Hai Bà Trưng, Hà Nội', 'yen.ph05@gmail.com', 1),
+(N'Đỗ Hoàng Long', '2015-06-20', 'M', '0977000005', N'Tây Hồ, Hà Nội', 'long.dh15@gmail.com', 1),
+(N'Vũ Phương Thảo', '1993-01-30', 'O', '0977000006', N'Thanh Xuân, Hà Nội', 'thao.vp93@gmail.com', 1);
+GO
+
+INSERT INTO Appointment (appointment_datetime, reason, status, patient_id, doctor_id, is_active) VALUES
+-- Đã hoàn thành
+('2026-07-01 08:30:00', N'Knee injury consultation', 'completed', 13, 13, 1),
+('2026-07-02 10:00:00', N'Shoulder pain examination', 'completed', 14, 14, 1),
+('2026-07-03 09:00:00', N'Routine heart checkup', 'completed', 15, 15, 1),
+('2026-07-04 14:00:00', N'Chronic headache evaluation', 'completed', 16, 17, 1),
+('2026-07-05 10:30:00', N'Bone fracture follow-up', 'completed', 19, 19, 1),
+('2026-07-06 11:00:00', N'Chemotherapy session 1', 'completed', 20, 21, 1),
+-- Sắp tới
+('2026-07-15 14:00:00', N'Physical therapy follow-up', 'upcoming', 13, 14, 1),
+('2026-07-18 09:30:00', N'Cardiology Echo check', 'upcoming', 18, 15, 1),
+('2026-07-20 10:00:00', N'Pediatric Neuro assessment', 'upcoming', 23, 17, 1),
+('2026-07-22 15:00:00', N'Spine alignment check', 'upcoming', 21, 20, 1),
+('2026-07-25 09:00:00', N'Oncology blood test review', 'upcoming', 20, 21, 1),
+('2026-07-28 13:30:00', N'General checkup after discharge', 'upcoming', 15, 13, 1),
+-- Hủy
+('2026-06-20 11:00:00', N'Severe chest pain crisis', 'cancelled', 17, 15, 1),
+('2026-06-25 15:30:00', N'Routine Checkup', 'cancelled', 18, 17, 1),
+('2026-07-02 16:00:00', N'Joint stiffness consultation', 'cancelled', 24, 17, 1),
+('2026-07-03 10:00:00', N'Post-op vision evaluation', 'cancelled', 10, 1, 1);
+GO
+
+INSERT INTO MedicalRecord (diagnosis, note, patient_id, doctor_id, is_active) VALUES
+(N'Knee ligament strain', N'Physical therapy recommended', 13, 13, 1),
+(N'Rotator cuff inflammation', N'Medication and exercise prescribed', 14, 14, 1),
+(N'Hypertension Stage 1', N'Patient needs to monitor blood pressure daily.', 15, 15, 1),
+(N'Migraine with aura', N'Prescribed specialist painkillers and dim room rest.', 16, 17, 1),
+(N'Femur Fracture (Left side)', N'Keep cast for 6 weeks, no heavy lifting.', 19, 19, 1),
+(N'Lung Cancer Stage II', N'Admitted for intensive chemotherapy plan.', 20, 21, 1),
+(N'Mild Arrhythmia', N'Avoid caffeine, monitor heart rate using smartwatch.', 17, 15, 1),
+(N'Gastritis Acute', N'Take anti-acid medications 30 minutes before meals.', 18, 17, 1);
+GO
+
+INSERT INTO Prescription (notes, medical_record_id, is_active) VALUES
+(N'Take strictly after food.', 15, 1),
+(N'Use pain reliever only when necessary.', 17, 1),
+(N'Do not skip doses.', 20, 1),
+(N'Rest in a quiet room.', 16, 1),
+(N'High cost specialist therapy items included.', 18, 1)
+GO
+
+INSERT INTO PrescriptionItem (prescription_id, medication_id, dosage_instruction, duration_days, quantity_dispensed, is_active) VALUES
+(6, 16, N'Take 1 tablet every 8 hours.', 10, 30, 1),
+(7, 19, N'Take 1 capsule daily in the morning.', 30, 30, 1),
+(8, 14, N'Take 1 tablet after meals.', 30, 30, 1),
+(9, 18, N'Take 1 pill before bedtime.', 14, 14, 1),
+(10, 15, N'Take 2 capsules after lunch and dinner.', 10, 400, 1),
+(10, 17, N'Take 1 tablet in the morning.', 10, 200, 1);
+
+INSERT INTO Admission (room, admission_date, discharge_date, cost, patient_id, doctor_id, department_id, is_active) VALUES
+('R201', '2026-07-01', '2026-07-04', 4500000, 13, 13, 6, 1),
+('Room F102', '2026-07-01', '2026-07-08', 14500000, 14, 14, 9, 1),
+('Room F103', '2026-07-02', '2026-07-07', 9000000, 21, 20, 7, 1),
+('101A', '2026-06-01', NULL, NULL, 17, 15, 4, 1),
+('Room E401', '2026-07-05', NULL, NULL, 20, 21, 10, 1);
