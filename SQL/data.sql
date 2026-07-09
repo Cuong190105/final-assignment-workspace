@@ -123,7 +123,7 @@ USE HealTrackDB;
 GO
 
 INSERT INTO Department (name, location, head_doctor_id, is_active)
-VALUES ('Cardiology', 'Building A - Floor 3', NULL, 1);
+VALUES ('Cardiology 2', 'Building A - Floor 3', NULL, 1);
 GO
 
 INSERT INTO Doctor (full_name, phone, email, specialization, is_active, department_id)
