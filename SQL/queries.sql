@@ -1,4 +1,4 @@
--- ============================
+-- ==== Cuong
 -- Q11
 -- PREPARE PROCEDURE
 CREATE OR ALTER PROCEDURE InsertMedicalRecordWithPrescription
