@@ -108,6 +108,60 @@ INSERT INTO MedicalRecord (diagnosis, note, patient_id, doctor_id, created_at) V
 ('High Cholesterol', 'Patient recommended to reduce saturated fats in diet.', 2, 3, '2026-04-09');
 GO
 
+INSERT INTO Admission (room, admission_date, discharge_date, cost, patient_id, doctor_id, department_id) VALUES
+('101A', '2025-06-01', '2025-06-10', 5000, 1, 1, 1),
+('202B', '2025-09-02', '2025-09-12', 7000, 2, 2, 2),
+('303C', '2025-11-03', '2025-11-13', 6000, 3, 3, 2),
+('404D', '2026-01-04', '2026-01-14', 8000, 4, 4, 1),
+('606F', '2026-05-01', NULL, NULL, 1, 2, 2),
+('102A', '2026-07-03', NULL, NULL, 2, 3, 1);
+GO
+
+--Bui Dang Thinh
+
+USE HealTrackDB;
+GO
+
+INSERT INTO Department (name, location, head_doctor_id, is_active)
+VALUES ('Cardiology', 'Building A - Floor 3', NULL, 1);
+GO
+
+INSERT INTO Doctor (full_name, phone, email, specialization, is_active, department_id)
+VALUES 
+('John Smith', '0901234567', 'john.smith@healtrack.com', 'Cardiologist', 1, 4),
+('Emily Johnson', '0902345678', 'emily.johnson@healtrack.com', 'Cardiac Surgeon', 1, 4),
+('Bear Paul', '0915658253', 'bear.paul@healtrack.com', 'Cardiac Surgeon', 1, 4);
+
+-- Cập nhật head_doctor_id cho Department sau khi Doctor đã tồn tại
+UPDATE Department
+SET head_doctor_id = 7
+WHERE id = 4;
+
+INSERT INTO Patient (full_name, dob, gender, phone, address, email, is_active)
+VALUES 
+('Michael Brown', '1985-04-12', 'M', '0911223344', '123 Main Street, District 1', 'michael.brown@gmail.com', 1),
+('Sarah Davis', '1992-09-25', 'F', '0922334455', '456 Second Avenue, District 3', 'sarah.davis@gmail.com', 1);
+GO
+
+INSERT INTO Appointment (appointment_datetime, reason, status, patient_id, doctor_id, is_active)
+VALUES 
+('2026-07-10 09:00:00', 'Routine heart checkup', 'upcoming', 8, 7, 1),
+('2026-07-11 14:30:00', 'Chest pain evaluation', 'upcoming', 9, 8, 1),
+('2026-06-20 10:00:00', 'Follow-up consultation', 'completed', 8, 8, 1);
+GO
+
+INSERT INTO MedicalRecord (diagnosis, note, patient_id, doctor_id, is_active)
+VALUES 
+('Hypertension', 'Patient advised to reduce salt intake and monitor blood pressure daily.', 8, 5, 1),
+('Arrhythmia', 'Irregular heartbeat detected, scheduled for further ECG testing.', 9, 8, 1),
+('Mild Angina', 'Prescribed medication and recommended lifestyle changes.', 8, 7, 1);
+GO
+
+INSERT INTO Admission (room, admission_date, discharge_date, cost, is_active, patient_id, doctor_id, department_id)
+VALUES 
+('A-301', '2026-06-15', '2026-06-20', 5000000, 1, 8, 5, 4),
+('A-302', '2026-06-18', NULL, 3000000, 1, 9, 8, 4);
+
 -- SELF HANDLE
 
 INSERT INTO Prescription (notes, medical_record_id, created_at) VALUES
@@ -138,12 +192,4 @@ INSERT INTO PrescriptionItem (prescription_id, medication_id, dosage_instruction
 (1, 18, 'Take one tablet every night before bed.', 30, 30),
 (2, 19, 'Take one tablet daily after meals.', 30, 30),
 (3, 20, 'Take one capsule every 8 hours.', 10, 30);
-
-INSERT INTO Admission (room, admission_date, discharge_date, cost, patient_id, doctor_id, department_id) VALUES
-('101A', '2025-06-01', '2025-06-10', 5000, 1, 1, 1),
-('202B', '2025-09-02', '2025-09-12', 7000, 2, 2, 2),
-('303C', '2025-11-03', '2025-11-13', 6000, 3, 3, 2),
-('404D', '2026-01-04', '2026-01-14', 8000, 4, 4, 1),
-('606F', '2026-05-01', NULL, NULL, 1, 2, 2),
-('102A', '2026-07-03', NULL, NULL, 2, 3, 1);
 GO
