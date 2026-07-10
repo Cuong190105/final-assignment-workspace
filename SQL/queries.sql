@@ -125,16 +125,22 @@ ORDER BY d.full_name;
 
 -- LINH Q7z)
 SELECT 
-    p.full_name AS patient_name,
-    SUM(pi.quantity_dispensed * m.price) AS total_cost
-FROM Patient p
-JOIN MedicalRecord mr ON mr.patient_id = p.id
-JOIN Prescription pr ON pr.medical_record_id = mr.id
-JOIN PrescriptionItem pi ON pi.prescription_id = pr.id
-JOIN Medication m ON m.id = pi.medication_id
-GROUP BY p.id, p.full_name
-HAVING SUM(pi.quantity_dispensed * m.price) > 500000
-ORDER BY total_cost DESC;
+    t.patient_name,
+    t.total_cost
+FROM (
+    SELECT 
+        p.id,
+        p.full_name AS patient_name,
+        SUM(pi.quantity_dispensed * m.price) AS total_cost
+    FROM Patient p
+    JOIN MedicalRecord mr ON mr.patient_id = p.id
+    JOIN Prescription pr ON pr.medical_record_id = mr.id
+    JOIN PrescriptionItem pi ON pi.prescription_id = pr.id
+    JOIN Medication m ON m.id = pi.medication_id
+    GROUP BY p.id, p.full_name
+) t
+WHERE t.total_cost > 500000
+ORDER BY t.total_cost DESC;
 
 -- THAI Q8aa)
 CREATE VIEW ActivePatients

@@ -46,7 +46,7 @@ CREATE TABLE Appointment (
 	id INT IDENTITY(1, 1),
 	appointment_datetime DATETIME NOT NULL,
 	reason NVARCHAR(255) NOT NULL,
-	status VARCHAR(20) NOT NULL,
+	status VARCHAR(20) NOT NULL DEFAULT 'upcoming',
 	patient_id INT NOT NULL,
 	doctor_id INT NOT NULL,
 	is_active BIT NOT NULL DEFAULT 1,
