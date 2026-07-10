@@ -3,7 +3,6 @@
 SELECT id, full_name, dob, gender, phone, address, email
     FROM Patient
     WHERE dob < '1990-01-01'
-        AND is_active = 1
     ORDER BY dob ASC;
 
 -- THINH Q4q) List all appointments with a &quot;scheduled/upcoming&quot; status that fall within the next 30 days from today. Show which patient and which doctor each appointment belongs to.
@@ -115,11 +114,11 @@ SELECT
     dep.name AS department_name
 FROM Doctor d
 JOIN Department dep ON d.department_id = dep.id
-WHERE d.is_active = 1
-    AND NOT EXISTS (
+WHERE NOT EXISTS (
         SELECT 1
         FROM Appointment a
         WHERE a.doctor_id = d.id
+            AND a.is_active = 1
     )
 ORDER BY d.full_name;
 
