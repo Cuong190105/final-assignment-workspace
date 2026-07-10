@@ -34,7 +34,7 @@ VALUES
 INSERT INTO Doctor (full_name, phone, email, specialization, department_id)
 VALUES
 (N'Pham Minh Khang', '0908111222', 'khang.pm@hospital.com', N'Physical Rehabilitation', 1),
-(N'Hoang Gia Bao', '0908333444', 'bao.hg@hospital.com', N'Sports Medicine', 1);
+(N'Hoang Gia Bao', '0908333445', 'bao.hg@hospital.com', N'Sports Medicine', 1);
 
 UPDATE Department
 SET head_doctor_id = 1
@@ -282,16 +282,16 @@ INSERT INTO Department (name, location, head_doctor_id, is_active) VALUES
 GO
 
 INSERT INTO Doctor (full_name, phone, email, specialization, department_id, is_active) VALUES
-(N'Phạm Minh Khang', '0908111222', 'khang.pm@hospital.com', N'Physical Rehabilitation', 6, 1),
-(N'Hoàng Gia Bảo', '0908333444', 'bao.hg@hospital.com', N'Sports Medicine', 6, 1),
-(N'Dr. Emily Carter', '555-1111', 'emily.carter@example.com', 'Cardiologist', 7, 1),
-(N'John Smith', '0901234567', 'john.smith@healtrack.com', 'Cardiac Surgeon', 7, 1),
-(N'Dr. Michael Thompson', '555-2222', 'michael.thompson@example.com', 'Neurologist', 8, 1),
-(N'Dr. Sarah Lee', '555-3333', 'sarah.lee@example.com', 'Pediatric Neurologist', 8, 1),
-(N'Hà Triệu Hoan', '0955333444', 'hoan.ht@healtrack.com', N'Orthopedic Surgeon', 9, 1),
-(N'Vũ Hoàng Long', '0955777888', 'long.vh@healtrack.com', N'Orthopedic Specialist', 9, 1),
-(N'Lưu Tiến Dũng', '0955111222', 'dung.lt@healtrack.com', N'Oncologist', 10, 1),
-(N'Nguyễn Xuân Sơn', '0955222333', 'son.nx@healtrack.com', N'Surgical Oncologist', 10, 1);
+(N'Phạm Minh Khang', '0908111223', 'khang.pm2@hospital.com', N'Physical Rehabilitation', 6, 1),
+(N'Hoàng Gia Bảo', '0908333444', 'bao.hg2@hospital.com', N'Sports Medicine', 6, 1),
+(N'Dr. Emily Carter', '555-1112', 'emily.carter2@example.com', 'Cardiologist', 7, 1),
+(N'John Smith', '0901234568', 'john.smith2@healtrack.com', 'Cardiac Surgeon', 7, 1),
+(N'Dr. Michael Thompson', '555-2223', 'michael.thompson2@example.com', 'Neurologist', 8, 1),
+(N'Dr. Sarah Lee', '555-3334', 'sarah.lee2@example.com', 'Pediatric Neurologist', 8, 1),
+(N'Hà Triệu Hoan', '0955333444', 'hoan.ht2@healtrack.com', N'Orthopedic Surgeon', 9, 1),
+(N'Vũ Hoàng Long', '0955777888', 'long.vh2@healtrack.com', N'Orthopedic Specialist', 9, 1),
+(N'Lưu Tiến Dũng', '0955111222', 'dung.lt2@healtrack.com', N'Oncologist', 10, 1),
+(N'Nguyễn Xuân Sơn', '0955222333', 'son.nx2@healtrack.com', N'Surgical Oncologist', 10, 1);
 GO
 
 UPDATE Department SET head_doctor_id = 13 WHERE id = 6; 

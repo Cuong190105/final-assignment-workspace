@@ -28,6 +28,8 @@ CREATE TABLE Doctor (
 
 	CONSTRAINT PK_Doctor PRIMARY KEY (id),
 	CONSTRAINT FK_Doctor_Department FOREIGN KEY (department_id) REFERENCES Department(id),
+	CONSTRAINT UQ_Doctor_Email UNIQUE (email),
+	CONSTRAINT UQ_Doctor_Phone UNIQUE (phone)
 );
 CREATE TABLE Patient (
 	id INT IDENTITY(1, 1),
