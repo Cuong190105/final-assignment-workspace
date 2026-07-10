@@ -143,18 +143,32 @@ WHERE t.total_cost > 500000
 ORDER BY t.total_cost DESC;
 
 -- THAI Q8aa)
+-- CREATE VIEW ActivePatients
+-- AS
+-- SELECT
+--     id,
+--     full_name,
+--     dob,
+--     gender,
+--     phone,
+--     address,
+--     email
+-- FROM Patient p
+-- LEFT JOIN Admission a ON p.id = a.patient_id AND a.is_active = 1
+-- LEFT JOIN MedicalRecord mr ON p.id = mr.patient_id AND mr.is_active = 1
+-- WHERE p.is_active = 1 AND (a.admission_date);
+-- GO
+
 CREATE VIEW ActivePatients
 AS
-SELECT
-    id,
-    full_name,
-    dob,
-    gender,
-    phone,
-    address,
-    email
-FROM Patient
-WHERE is_active = 1;
+    SELECT p.id, p.full_name, p.dob, p.gender, p.phone, p.address, p.email
+    FROM dbo.Appointment a LEFT JOIN dbo.Patient p ON a.patient_id = p.id
+    WHERE a.is_active = 1 AND p.is_active = 1 AND a.appointment_datetime > SYSDATETIME() AND a.status = 'upcoming'
+    UNION
+    SELECT p.id, p.full_name, p.dob, p.gender, p.phone, p.address, p.email
+    FROM dbo.Admission a LEFT JOIN dbo.Patient p ON a.patient_id = p.id
+    WHERE a.is_active = 1 AND p.is_active = 1 AND a.admission_date > SYSDATETIME() AND a.discharge_date IS NULL
+;
 GO
 
 -- THAI Q8bb)
@@ -311,7 +325,7 @@ BEGIN
 		RETURN;
 	END
 
-	IF @TotalCost < 0
+	IF @TotalCost <= 0
 	BEGIN 
 		RAISERROR (N'Lỗi: Tổng chi phí phải là số dương (lớn hơn 0)', 16, 1);
 		RETURN;
