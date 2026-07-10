@@ -47,10 +47,10 @@ SELECT
     dep.name AS department_name
 FROM Doctor d
 JOIN Department dep ON d.department_id = dep.id
-WHERE d.is_active = 1
-    AND NOT EXISTS (
+WHERE NOT EXISTS (
         SELECT 1
         FROM Appointment a
         WHERE a.doctor_id = d.id
+            AND a.is_active = 1
     )
 ORDER BY d.full_name;
