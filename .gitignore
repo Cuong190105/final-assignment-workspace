@@ -66,3 +66,5 @@ nunit-*.xml
 /.vs/VSWorkspaceState.json
 *.docx
 *.zip
+/CSharp/.vs/Final/CopilotIndices/18.8.1083.22234
+/CSharp/Final.slnx
