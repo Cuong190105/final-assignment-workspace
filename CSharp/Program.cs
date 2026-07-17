@@ -24,7 +24,7 @@
             aoManager.AddBooking(3, "Passenger 3", "P000003", "3C", BookingStatus.Cancelled);
             aoManager.AddBooking(4, "Passenger 4", "P000004", "4D", BookingStatus.Confirmed);
             aoManager.AddBooking(5, "Passenger 5", "P000005", "5E", BookingStatus.Pending);
-            aoManager.AddBooking(6, "Passenger 6", "P000006", "6F", BookingStatus.Cancelled);
+            aoManager.AddBooking(6, "Passenger 6", "P000006", "6F", BookingStatus.Confirmed);
             aoManager.AddBooking(1, "Passenger 7", "P000007", "7G", BookingStatus.Pending);
             aoManager.AddBooking(2, "Passenger 8", "P000008", "8H", BookingStatus.Confirmed);
             aoManager.AddBooking(3, "Passenger 9", "P000009", "9I", BookingStatus.Confirmed);

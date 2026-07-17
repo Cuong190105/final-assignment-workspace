@@ -68,7 +68,7 @@ namespace Final
             {
                 throw new InvalidOperationException($"Seat {thesSeatNumber} on flight {theiFlightId} is already booked");
             }
-            if (myoBookings.Count(aoBooking => aoBooking.FlightId == theiFlightId) >= aoFlight.TotalSeats)
+            if (myoBookings.Count(aoBooking => aoBooking.FlightId == theiFlightId && aoBooking.Status != BookingStatus.Cancelled) >= aoFlight.TotalSeats)
             {
                 throw new InvalidOperationException($"Flight {theiFlightId} is full");
             }
