@@ -64,3 +64,5 @@ nunit-*.xml
 /.vs/final-assignment-workspace.slnx/v18/DocumentLayout.json
 /.vs/slnx.sqlite
 /.vs/VSWorkspaceState.json
+*.docx
+*.zip
