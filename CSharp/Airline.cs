@@ -50,6 +50,10 @@
             set => myiFoundedYear = value;
         }
         public override string EntityType => "Airline";
+
+        /// <summary>
+        /// Returns a string representation of the airline's information.
+        /// </summary>
         public override string GetInfo()
         {
             return $"Airline ID: {AirlineId}, Name: {AirlineName}, IATA Code: {IATACode}, Country: {Country}, Founded Year: {FoundedYear}";

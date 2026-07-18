@@ -121,6 +121,10 @@
             }
         }
         public override string EntityType => "Flight";
+
+        /// <summary>
+        /// Returns a string representation of the flight's information, including flight ID, airline ID, flight code, origin, destination, departure time, duration, total seats, and price per seat.
+        /// </summary>
         public override string GetInfo()
         {
             return $"Flight ID: {FlightId}, Airline ID: {AirlineId}, Flight Code: {FlightCode}, Origin: {Origin}, Destination: {Destination}, Departure Time: {DepartureTime}, Duration: {DurationMinutes} minutes, Total Seats: {TotalSeats}, Price Per Seat: {PricePerSeat}";
