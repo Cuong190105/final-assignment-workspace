@@ -12,6 +12,10 @@
         public bool LoungeAccess { get; set; }
         public bool MealIncluded { get; set; }
         public decimal PremiumSurcharge { get; set; }
+
+        /// <summary>
+        /// Returns a string representation of the business flight's information, including lounge access, meal inclusion, and premium surcharge.
+        /// </summary>
         public override string GetInfo()
         {
             return $"{base.GetInfo()}, Lounge Access: {LoungeAccess}, Meal Included: {MealIncluded}, Premium Surcharge: {PremiumSurcharge}";

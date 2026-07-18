@@ -61,6 +61,10 @@
         }
         public decimal BookingFee => myoFlight.PricePerSeat * BookingFeePercentage;
         public override string EntityType => "Booking";
+
+        /// <summary>
+        /// Returns a string representation of the booking information.
+        /// </summary>
         public override string GetInfo()
         {
             return $"Booking ID: {BookingId}, Flight ID: {FlightId}, Passenger Name: {PassengerName}, Passport Number: {PassportNumber}, Seat Number: {SeatNumber}, Status: {Status}, Booking Fee: {BookingFee}";
