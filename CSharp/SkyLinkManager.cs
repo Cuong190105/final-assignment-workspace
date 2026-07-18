@@ -89,5 +89,102 @@ namespace Final
                 return thesIATACode + thesOrigin + theiFlightId.ToString().PadLeft(3, '0') + aoFlightsWithSamePrefix.Count.ToString();
             }
         }
+
+        /// =======================Q6==============================
+
+        /// <summary>
+        /// Q6.v - Finds the day of the week with the highest number of flight departures.
+        /// Returns null if there are no flights at all.
+        /// </summary>
+        public BusiestDayResult? GetBusiestDayOfWeek()
+        {
+            var aoBusiestDay = myoFlights
+                .GroupBy(aoFlight => aoFlight.DepartureTime.DayOfWeek)
+                .Select(aoGroup => new BusiestDayResult
+                {
+                    DayName = aoGroup.Key.ToString(),
+                    DepartureCount = aoGroup.Count()
+                })
+                .OrderByDescending(aoResult => aoResult.DepartureCount)
+                .FirstOrDefault();
+
+            return aoBusiestDay;
+        }
+
+        /// <summary>
+        /// Q6.w - Calculates the average load factor (ConfirmedBookings / TotalSeats x 100)
+        /// per airline, averaged across all of that airline's flights. Airlines with zero
+        /// flights are excluded. Result is rounded to 2 decimal places.
+        /// </summary>
+        public List<AirlineLoadFactorResult> GetAverageLoadFactorPerAirline()
+        {
+            var aoResults = myoAirlines
+                .Select(aoAirline => new
+                {
+                    aoAirline.AirlineName,
+                    aoAirlineFlights = myoFlights.Where(aoFlight => aoFlight.AirlineId == aoAirline.AirlineId).ToList()
+                })
+                .Where(aoItem => aoItem.aoAirlineFlights.Count > 0)
+                .Select(aoItem => new AirlineLoadFactorResult
+                {
+                    AirlineName = aoItem.AirlineName,
+                    AvgLoadFactor = Math.Round(
+                        aoItem.aoAirlineFlights.Average(aoFlight =>
+                            (decimal)myoBookings.Count(aoBooking =>
+                                aoBooking.FlightId == aoFlight.FlightId
+                                && aoBooking.Status == BookingStatus.Confirmed)
+                            / aoFlight.TotalSeats * 100m),
+                        2)
+                })
+                .ToList();
+
+            return aoResults;
+        }
+
+        /// <summary>
+        /// Q6.x - Groups flights by route (Origin + Destination pair) and computes
+        /// flight count, cheapest, most expensive and average price per route.
+        /// Sorted by flight count descending.
+        /// </summary>
+        public List<RouteStatisticsResult> GetRouteStatistics()
+        {
+            var aoResults = myoFlights
+                .GroupBy(aoFlight => new { aoFlight.Origin, aoFlight.Destination })
+                .Select(aoGroup => new RouteStatisticsResult
+                {
+                    Route = $"{aoGroup.Key.Origin} -> {aoGroup.Key.Destination}",
+                    FlightCount = aoGroup.Count(),
+                    CheapestPrice = aoGroup.Min(aoFlight => aoFlight.PricePerSeat),
+                    MostExpensivePrice = aoGroup.Max(aoFlight => aoFlight.PricePerSeat),
+                    AveragePrice = aoGroup.Average(aoFlight => aoFlight.PricePerSeat)
+                })
+                .OrderByDescending(aoResult => aoResult.FlightCount)
+                .ToList();
+
+            return aoResults;
+        }
+
+        /// <summary>
+        /// Q6.y - Finds passengers (grouped by PassportNumber) whose bookings are
+        /// ALL Cancelled (i.e. they have zero non-cancelled bookings).
+        /// </summary>
+        public List<CancelledPassengerResult> GetFullyCancelledPassengers()
+        {
+            var aoResults = myoBookings
+                .GroupBy(aoBooking => aoBooking.PassportNumber)
+                .Where(aoGroup => aoGroup.All(aoBooking => aoBooking.Status == BookingStatus.Cancelled))
+                .Select(aoGroup => new CancelledPassengerResult
+                {
+                    PassengerName = aoGroup.First().PassengerName,
+                    PassportNumber = aoGroup.Key,
+                    CancelledCount = aoGroup.Count()
+                })
+                .ToList();
+
+            return aoResults;
+        }
     }
+
+
+
 }
