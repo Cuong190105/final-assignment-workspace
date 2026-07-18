@@ -84,6 +84,39 @@
             var aoFlightSame2 = aoManager.AddFlight(1, "HAN", "DAD", DateTime.Now + TimeSpan.FromDays(14), 120, 180, 1_500_000);
             Console.WriteLine($"Flight 1: {aoFlightSame1.FlightCode}");
             Console.WriteLine($"Flight 2: {aoFlightSame2.FlightCode}");
+
+
+
+
+            // =============================== Q6Results ================================
+            Console.WriteLine();
+            Console.WriteLine("===== Q6.v - Busiest Day Of Week =====");
+            var aoBusiest = aoManager.GetBusiestDayOfWeek();
+            if (aoBusiest != null)
+            {
+                Console.WriteLine($"{aoBusiest.DayName}: {aoBusiest.DepartureCount} departures");
+            }
+
+            Console.WriteLine();
+            Console.WriteLine("===== Q6.w - Average Load Factor Per Airline =====");
+            foreach (var aoItem in aoManager.GetAverageLoadFactorPerAirline())
+            {
+                Console.WriteLine($"{aoItem.AirlineName}: {aoItem.AvgLoadFactor}%");
+            }
+
+            Console.WriteLine();
+            Console.WriteLine("===== Q6.x - Route Statistics =====");
+            foreach (var aoItem in aoManager.GetRouteStatistics())
+            {
+                Console.WriteLine($"{aoItem.Route} | Flights: {aoItem.FlightCount} | Cheapest: {aoItem.CheapestPrice} | Most Expensive: {aoItem.MostExpensivePrice} | Avg: {aoItem.AveragePrice}");
+            }
+
+            Console.WriteLine();
+            Console.WriteLine("===== Q6.y - Fully Cancelled Passengers =====");
+            foreach (var aoItem in aoManager.GetFullyCancelledPassengers())
+            {
+                Console.WriteLine($"{aoItem.PassengerName} ({aoItem.PassportNumber}): {aoItem.CancelledCount} cancelled");
+            }
         }
     }
 }
