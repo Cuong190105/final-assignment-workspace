@@ -117,6 +117,57 @@
             {
                 Console.WriteLine($"{aoItem.PassengerName} ({aoItem.PassportNumber}): {aoItem.CancelledCount} cancelled");
             }
+
+            // Q8 Demo
+            Console.WriteLine();
+            Console.WriteLine("===== Q8 - Sorting Algorithms on Flights =====");
+            // Create a list with 10 flights with different departure times and prices
+            List<Flight> flights = new List<Flight>()
+{
+    new Flight(1, 1, "F1", "HAN", "SGN", DateTime.Now.AddDays(1).AddHours(10), 100, 150, 300),
+    new Flight(2, 1, "F2", "HAN", "SGN", DateTime.Now.AddDays(1).AddHours(8), 100, 150, 200),
+    new Flight(3, 1, "F3", "HAN", "SGN", DateTime.Now.AddDays(1).AddHours(12), 100, 150, 500),
+    new Flight(4, 1, "F4", "HAN", "SGN", DateTime.Now.AddDays(1).AddHours(6), 100, 150, 100),
+    new Flight(5, 1, "F5", "HAN", "SGN", DateTime.Now.AddDays(1).AddHours(14), 100, 150, 450),
+    new Flight(6, 1, "F6", "HAN", "SGN", DateTime.Now.AddDays(1).AddHours(9), 100, 150, 250),
+    new Flight(7, 1, "F7", "HAN", "SGN", DateTime.Now.AddDays(1).AddHours(11), 100, 150, 350),
+    new Flight(8, 1, "F8", "HAN", "SGN", DateTime.Now.AddDays(1).AddHours(7), 100, 150, 150),
+    new Flight(9, 1, "F9", "HAN", "SGN", DateTime.Now.AddDays(1).AddHours(13), 100, 150, 400),
+    new Flight(10, 1, "F10", "HAN", "SGN", DateTime.Now.AddDays(1).AddHours(5), 100, 150, 50)
+};
+
+            // Create copies of the list for sorting
+            List<Flight> listBubble = new List<Flight>(flights);
+            List<Flight> listMerge = new List<Flight>(flights);
+
+            Q8Results sorter = new Q8Results();
+
+            // Sort using Bubble Sort
+            sorter.BubbleSortByPrice(listBubble);
+
+            // Sort using Merge Sort
+            sorter.MergeSortByDeparture(listMerge);
+
+            // Comparing the number of comparisons
+            Console.WriteLine("Comparisions:");
+            Console.WriteLine($"Bubble Sort: {sorter.myiBubbleComparisons}");
+            Console.WriteLine($"Merge Sort:  {sorter.myiMergeComparisons}");
+
+            // Search for a flight by DepartureTime using Binary Search
+            DateTime target = new DateTime(2025, 1, 1, 10, 0, 0);
+            int index = sorter.BinarySearchByDeparture(listMerge, target);
+
+            Console.WriteLine("Binary Search:");
+            if (index != -1)
+            {
+                Console.WriteLine("Tìm thấy chuyến bay:");
+                Console.WriteLine($"{listMerge[index].FlightCode} - {listMerge[index].DepartureTime:HH:mm}");
+            }
+            else
+            {
+                Console.WriteLine("Không tìm thấy chuyến bay");
+            }
+
         }
     }
 }
