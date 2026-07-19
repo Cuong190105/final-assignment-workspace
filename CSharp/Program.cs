@@ -353,12 +353,20 @@ namespace Final
             }
             
             Console.WriteLine("Standby Queue Flight 6");
+            // Temp list to hold the dequeued passengers for display
+            List<StandbyPassenger> aoStandbyList = new List<StandbyPassenger>();
             var aoStandbyQueue = aoManager.Flights.First(f => f.FlightId == 6).StandbyQueue;
             while (aoStandbyQueue.Count() > 0)
             {
                 var aoStandbyPassenger = aoStandbyQueue.Dequeue();
                 Console.WriteLine(
                     $"{aoStandbyPassenger.PassengerName} - Priority {aoStandbyPassenger.Priority}");
+                aoStandbyList.Add(aoStandbyPassenger);
+            }
+            // Re-enqueue the passengers back to the standby queue
+            foreach (var aoStandbyPassenger in aoStandbyList)
+            {
+                aoStandbyQueue.Enqueue(aoStandbyPassenger);
             }
             // ==========================================================
             // Group Summary by EntityType (tt)
