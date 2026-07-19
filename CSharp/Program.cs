@@ -4,6 +4,11 @@ namespace Final
     {
         public static void Main(string[] args)
         {
+            // Set console encoding to UTF-8 to support Vietnamese characters
+            Console.OutputEncoding = Encoding.UTF8;
+            Console.InputEncoding = Encoding.UTF8;
+
+            // ===================Part A==========================
             // Crreate an instance of SkyLinkManager
             SkyLinkManager aoManager = SkyLinkManager.Instance;
 
@@ -86,7 +91,42 @@ namespace Final
             Console.WriteLine($"Flight 2: {aoFlightSame2.FlightCode}");
 
 
+            // =============================== Q5Results ================================
+            Console.WriteLine("=== Q5 Demonstration ===");
+            Console.WriteLine("q, Confirmed bookings for flight 1:");
+            var aoConfirmedBookings1 = aoManager.GetConfirmedBookingsForFlight(1);
+            foreach (var aoBooking in aoConfirmedBookings1)
+            {
+                Console.WriteLine($" - Name: {aoBooking.PassengerName}, Passport: {aoBooking.PassportNumber}, Seat: {aoBooking.SeatNumber}, Fee: {aoBooking.BookingFee}");
+            }
 
+            Console.WriteLine("r, Top 5 most expensive flights:");
+            var aoTop5ExpensiveFlights = aoManager.GetTop5MostExpensiveFlightsWithAvailableSeats();
+            foreach (var aoFlight in aoTop5ExpensiveFlights)
+            {
+                Console.WriteLine($" - Airline: {aoFlight.AirlineName}, Flight Code: {aoFlight.FlightCode}, Origin: {aoFlight.Origin}, Destination: {aoFlight.Destination}, Price: {aoFlight.PricePerSeat:C}, Available Seats: {aoFlight.AvailableSeats}");
+            }
+
+            Console.WriteLine("s, Summary for each airline:");
+            var aoAirlineSummary = aoManager.GetAirlinesSummary();
+            foreach (var aoSummary in aoAirlineSummary)
+            {
+                Console.WriteLine($" - Airline: {aoSummary.AirlineName}, Total flights: {aoSummary.TotalFlights}, Total Bookings: {aoSummary.TotalBookings}, Confirmed Bookings: {aoSummary.ConfirmedBookings}, Total Revenue: {aoSummary.TotalRevenue:C}");
+            }
+
+            Console.WriteLine("t, Passengers with more than one booking:");
+            var aoPassengersWithMultipleBookings = aoManager.GetPassengersBookingMoreThanOnce();
+            foreach (var aoPassenger in aoPassengersWithMultipleBookings)
+            {
+                Console.WriteLine($" - Name: {aoPassenger.PassengerName}, Passport: {aoPassenger.PassportNumber}, Flight Count: {aoPassenger.FlightCount}");
+            }
+
+            Console.WriteLine("u, Flights schedule for route HAN-DAD:");
+            var aoFlightsSchedule = aoManager.GetFlightScheduleWithRoute("HAN", "DAD");
+            foreach (var aoFlight in aoFlightsSchedule)
+            {
+                Console.WriteLine($" - Flight Code: {aoFlight.FlightCode}, Departure: {aoFlight.DepartureTime}, Duration: {aoFlight.DurationMinutes} minutes, Price: {aoFlight.PricePerSeat:C}, Available Seats: {aoFlight.AvailableSeats}");
+            }
 
             // =============================== Q6Results ================================
             Console.WriteLine();
@@ -117,6 +157,95 @@ namespace Final
             {
                 Console.WriteLine($"{aoItem.PassengerName} ({aoItem.PassportNumber}): {aoItem.CancelledCount} cancelled");
             }
+
+            // Q7 Demo
+            Console.WriteLine("\n===== Q7 Demonstration =====");
+            Console.WriteLine("Thực hiện thêm 3 bookings");
+            Booking aoB1 = aoManager.AddBooking(1, "Nguyen Van A", "P000101", "15A", BookingStatus.Confirmed);
+            Booking aoB2 = aoManager.AddBooking(1, "Tran Thi B", "P000102", "15B", BookingStatus.Pending);
+            Booking aoB3 = aoManager.AddBooking(1, "Le Van C", "P000103", "15C", BookingStatus.Confirmed);
+            
+            Console.WriteLine($"Đã thêm: {aoB1.PassengerName} (ID: {aoB1.BookingId}, Trạng thái: {aoB1.Status})");
+            Console.WriteLine($"Đã thêm: {aoB2.PassengerName} (ID: {aoB2.BookingId}, Trạng thái: {aoB2.Status})");
+            Console.WriteLine($"Đã thêm: {aoB3.PassengerName} (ID: {aoB3.BookingId}, Trạng thái: {aoB3.Status})");
+
+            // Hủy booking 3
+            Console.WriteLine($"Thực hiện hủy booking vừa thêm (ID: {aoB3.BookingId})");
+            aoManager.CancelBooking(aoB3.BookingId);
+            Console.WriteLine($"Trạng thái Booking {aoB3.BookingId} sau khi hủy: {aoB3.Status}");
+
+            // Thực hiện Undo lần 1 (Hoàn tác việc Hủy booking 3 -> Khôi phục lại trạng thái Confirmed)
+            Console.WriteLine("Thực hiện Undo lần 1 (Hoàn tác việc hủy)");
+            aoManager.UndoLastBookingAction();
+            Console.WriteLine($"Trạng thái Booking {aoB3.BookingId} sau khi Undo hủy: {aoB3.Status} (Mong đợi: Confirmed)");
+
+            // Thực hiện Undo lần 2 (Hoàn tác việc Thêm booking 3 -> Xóa booking 3 khỏi hệ thống)
+            Console.WriteLine("Thực hiện Undo lần 2 (Hoàn tác việc thêm Booking 3)");
+            aoManager.UndoLastBookingAction();
+            // Thử tìm lại xem còn tồn tại không
+            bool abExistsB3 = aoManager.GetConfirmedBookingsForFlight(1).Any(b => b.BookingId == aoB3.BookingId);
+            Console.WriteLine($"Booking {aoB3.BookingId} còn tồn tại trong hệ thống không? {abExistsB3} (Mong đợi: False)");
+
+            // Thực hiện Undo lần 3 (Hoàn tác việc Thêm booking 2 -> Xóa booking 2)
+            Console.WriteLine("Thực hiện Undo lần 3 (Hoàn tác việc thêm Booking 2)");
+            aoManager.UndoLastBookingAction();
+
+            // Thực hiện Undo lần 4 (Hoàn tác việc Thêm booking 1 -> Xóa booking 1)
+            Console.WriteLine("Thực hiện Undo lần 4 (Hoàn tác việc thêm Booking 1)");
+            aoManager.UndoLastBookingAction();
+            Console.WriteLine("Undo hoàn thành thành công tất cả các bước.");
+
+            // Q8 Demo
+            Console.WriteLine();
+            Console.WriteLine("===== Q8 - Sorting Algorithms on Flights =====");
+            // Create a list with 10 flights with different departure times and prices
+            List<Flight> flights = new List<Flight>()
+            {
+                new Flight(1, 1, "F1", "HAN", "SGN", DateTime.Now.AddDays(1).AddHours(10), 100, 150, 300),
+                new Flight(2, 1, "F2", "HAN", "SGN", DateTime.Now.AddDays(1).AddHours(8), 100, 150, 200),
+                new Flight(3, 1, "F3", "HAN", "SGN", DateTime.Now.AddDays(1).AddHours(12), 100, 150, 500),
+                new Flight(4, 1, "F4", "HAN", "SGN", DateTime.Now.AddDays(1).AddHours(6), 100, 150, 100),
+                new Flight(5, 1, "F5", "HAN", "SGN", DateTime.Now.AddDays(1).AddHours(14), 100, 150, 450),
+                new Flight(6, 1, "F6", "HAN", "SGN", DateTime.Now.AddDays(1).AddHours(9), 100, 150, 250),
+                new Flight(7, 1, "F7", "HAN", "SGN", DateTime.Now.AddDays(1).AddHours(11), 100, 150, 350),
+                new Flight(8, 1, "F8", "HAN", "SGN", DateTime.Now.AddDays(1).AddHours(7), 100, 150, 150),
+                new Flight(9, 1, "F9", "HAN", "SGN", DateTime.Now.AddDays(1).AddHours(13), 100, 150, 400),
+                new Flight(10, 1, "F10", "HAN", "SGN", DateTime.Now.AddDays(1).AddHours(5), 100, 150, 50)
+            };
+
+            // Create copies of the list for sorting
+            List<Flight> listBubble = new List<Flight>(flights);
+            List<Flight> listMerge = new List<Flight>(flights);
+
+            Q8Results sorter = new Q8Results();
+
+            // Sort using Bubble Sort
+            sorter.BubbleSortByPrice(listBubble);
+
+            // Sort using Merge Sort
+            sorter.MergeSortByDeparture(listMerge);
+
+            // Comparing the number of comparisons
+            Console.WriteLine("Comparisions:");
+            Console.WriteLine($"Bubble Sort: {sorter.myiBubbleComparisons}");
+            Console.WriteLine($"Merge Sort:  {sorter.myiMergeComparisons}");
+
+            // Search for a flight by DepartureTime using Binary Search
+            DateTime target = new DateTime(2025, 1, 1, 10, 0, 0);
+            int index = sorter.BinarySearchByDeparture(listMerge, target);
+
+            Console.WriteLine("Binary Search:");
+            if (index != -1)
+            {
+                Console.WriteLine("Tìm thấy chuyến bay:");
+                Console.WriteLine($"{listMerge[index].FlightCode} - {listMerge[index].DepartureTime:HH:mm}");
+            }
+            else
+            {
+                Console.WriteLine("Không tìm thấy chuyến bay");
+            }
+
+
             //========================= Q9 =========================
 
             Console.WriteLine();
@@ -166,93 +295,7 @@ namespace Final
                 Console.WriteLine($"Status    : {aoPromoted.Status}");
             }
 
-            Console.WriteLine("======================================");
-
-            // Q8 Demo
-            Console.WriteLine();
-            Console.WriteLine("===== Q8 - Sorting Algorithms on Flights =====");
-            // Create a list with 10 flights with different departure times and prices
-            List<Flight> flights = new List<Flight>()
-{
-    new Flight(1, 1, "F1", "HAN", "SGN", DateTime.Now.AddDays(1).AddHours(10), 100, 150, 300),
-    new Flight(2, 1, "F2", "HAN", "SGN", DateTime.Now.AddDays(1).AddHours(8), 100, 150, 200),
-    new Flight(3, 1, "F3", "HAN", "SGN", DateTime.Now.AddDays(1).AddHours(12), 100, 150, 500),
-    new Flight(4, 1, "F4", "HAN", "SGN", DateTime.Now.AddDays(1).AddHours(6), 100, 150, 100),
-    new Flight(5, 1, "F5", "HAN", "SGN", DateTime.Now.AddDays(1).AddHours(14), 100, 150, 450),
-    new Flight(6, 1, "F6", "HAN", "SGN", DateTime.Now.AddDays(1).AddHours(9), 100, 150, 250),
-    new Flight(7, 1, "F7", "HAN", "SGN", DateTime.Now.AddDays(1).AddHours(11), 100, 150, 350),
-    new Flight(8, 1, "F8", "HAN", "SGN", DateTime.Now.AddDays(1).AddHours(7), 100, 150, 150),
-    new Flight(9, 1, "F9", "HAN", "SGN", DateTime.Now.AddDays(1).AddHours(13), 100, 150, 400),
-    new Flight(10, 1, "F10", "HAN", "SGN", DateTime.Now.AddDays(1).AddHours(5), 100, 150, 50)
-};
-
-            // Create copies of the list for sorting
-            List<Flight> listBubble = new List<Flight>(flights);
-            List<Flight> listMerge = new List<Flight>(flights);
-
-            Q8Results sorter = new Q8Results();
-
-            // Sort using Bubble Sort
-            sorter.BubbleSortByPrice(listBubble);
-
-            // Sort using Merge Sort
-            sorter.MergeSortByDeparture(listMerge);
-
-            // Comparing the number of comparisons
-            Console.WriteLine("Comparisions:");
-            Console.WriteLine($"Bubble Sort: {sorter.myiBubbleComparisons}");
-            Console.WriteLine($"Merge Sort:  {sorter.myiMergeComparisons}");
-
-            // Search for a flight by DepartureTime using Binary Search
-            DateTime target = new DateTime(2025, 1, 1, 10, 0, 0);
-            int index = sorter.BinarySearchByDeparture(listMerge, target);
-
-            Console.WriteLine("Binary Search:");
-            if (index != -1)
-            {
-                Console.WriteLine("Tìm thấy chuyến bay:");
-                Console.WriteLine($"{listMerge[index].FlightCode} - {listMerge[index].DepartureTime:HH:mm}");
-            }
-            else
-            {
-                Console.WriteLine("Không tìm thấy chuyến bay");
-            }
-
-            // Q7 Demo
-            Console.WriteLine("Thực hiện thêm 3 bookings");
-            Booking aoB1 = aoManager.AddBooking(1, "Nguyen Van A", "P000101", "15A", BookingStatus.Confirmed);
-            Booking aoB2 = aoManager.AddBooking(1, "Tran Thi B", "P000102", "15B", BookingStatus.Pending);
-            Booking aoB3 = aoManager.AddBooking(1, "Le Van C", "P000103", "15C", BookingStatus.Confirmed);
-            
-            Console.WriteLine($"Đã thêm: {aoB1.PassengerName} (ID: {aoB1.BookingId}, Trạng thái: {aoB1.Status})");
-            Console.WriteLine($"Đã thêm: {aoB2.PassengerName} (ID: {aoB2.BookingId}, Trạng thái: {aoB2.Status})");
-            Console.WriteLine($"Đã thêm: {aoB3.PassengerName} (ID: {aoB3.BookingId}, Trạng thái: {aoB3.Status})");
-
-            // Hủy booking 3
-            Console.WriteLine($"Thực hiện hủy booking vừa thêm (ID: {aoB3.BookingId})");
-            aoManager.CancelBooking(aoB3.BookingId);
-            Console.WriteLine($"Trạng thái Booking {aoB3.BookingId} sau khi hủy: {aoB3.Status}");
-
-            // Thực hiện Undo lần 1 (Hoàn tác việc Hủy booking 3 -> Khôi phục lại trạng thái Confirmed)
-            Console.WriteLine("Thực hiện Undo lần 1 (Hoàn tác việc hủy)");
-            aoManager.UndoLastBookingAction();
-            Console.WriteLine($"Trạng thái Booking {aoB3.BookingId} sau khi Undo hủy: {aoB3.Status} (Mong đợi: Confirmed)");
-
-            // Thực hiện Undo lần 2 (Hoàn tác việc Thêm booking 3 -> Xóa booking 3 khỏi hệ thống)
-            Console.WriteLine("Thực hiện Undo lần 2 (Hoàn tác việc thêm Booking 3)");
-            aoManager.UndoLastBookingAction();
-            // Thử tìm lại xem còn tồn tại không
-            bool abExistsB3 = aoManager.GetConfirmedBookingsForFlight(1).Any(b => b.BookingId == aoB3.BookingId);
-            Console.WriteLine($"Booking {aoB3.BookingId} còn tồn tại trong hệ thống không? {abExistsB3} (Mong đợi: False)");
-
-            // Thực hiện Undo lần 3 (Hoàn tác việc Thêm booking 2 -> Xóa booking 2)
-            Console.WriteLine("Thực hiện Undo lần 3 (Hoàn tác việc thêm Booking 2)");
-            aoManager.UndoLastBookingAction();
-
-            // Thực hiện Undo lần 4 (Hoàn tác việc Thêm booking 1 -> Xóa booking 1)
-            Console.WriteLine("Thực hiện Undo lần 4 (Hoàn tác việc thêm Booking 1)");
-            aoManager.UndoLastBookingAction();
-            Console.WriteLine("Undo hoàn thành thành công tất cả các bước.");
+            Console.WriteLine("======================================");    
         }
     }
 }
