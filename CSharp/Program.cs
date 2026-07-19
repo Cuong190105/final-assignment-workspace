@@ -117,6 +117,56 @@ namespace Final
             {
                 Console.WriteLine($"{aoItem.PassengerName} ({aoItem.PassportNumber}): {aoItem.CancelledCount} cancelled");
             }
+            //========================= Q9 =========================
+
+            Console.WriteLine();
+            Console.WriteLine("========== Q9 Demonstration ==========");
+
+            // Flight 6 đã đầy (2/2 ghế)
+
+            Console.WriteLine("Adding standby passengers...");
+
+            aoManager.AddStandbyPassenger(
+                6,
+                "Charlie",
+                "P100001",
+                3);
+
+            aoManager.AddStandbyPassenger(
+                6,
+                "David",
+                "P100002",
+                1);
+
+            aoManager.AddStandbyPassenger(
+                6,
+                "Emma",
+                "P100003",
+                2);
+
+            Console.WriteLine();
+
+            Console.WriteLine("Cancelling Booking ID = 6...");
+            aoManager.CancelBooking(6);
+
+            Console.WriteLine();
+
+            Console.WriteLine("Promoting highest-priority standby passenger...");
+
+            Booking? aoPromoted =
+                aoManager.PromoteFromStandby(6);
+
+            Console.WriteLine();
+
+            if (aoPromoted != null)
+            {
+                Console.WriteLine("Promotion successful!");
+                Console.WriteLine($"Passenger : {aoPromoted.PassengerName}");
+                Console.WriteLine($"Passport  : {aoPromoted.PassportNumber}");
+                Console.WriteLine($"Status    : {aoPromoted.Status}");
+            }
+
+            Console.WriteLine("======================================");
 
             // Q8 Demo
             Console.WriteLine();

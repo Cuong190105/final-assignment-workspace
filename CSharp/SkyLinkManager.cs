@@ -106,9 +106,23 @@ namespace Final
             {
                 throw new InvalidOperationException($"Seat {thesSeatNumber} on flight {theiFlightId} is already booked");
             }
-            if (myoBookings.Count(aoBooking => aoBooking.FlightId == theiFlightId && aoBooking.Status == BookingStatus.Confirmed) >= aoFlight.TotalSeats)
+            if (myoBookings.Count(aoBooking =>
+                    aoBooking.FlightId == theiFlightId &&
+                    aoBooking.Status == BookingStatus.Confirmed)
+                >= aoFlight.TotalSeats)
             {
-                throw new InvalidOperationException($"Flight {theiFlightId} is full");
+                StandbyPassenger aoStandbyPassenger =
+                    new StandbyPassenger(
+                        thesPassengerName,
+                        thesPassportNumber,
+                        3);
+
+                aoFlight.StandbyQueue.Enqueue(aoStandbyPassenger);
+
+                Console.WriteLine(
+                    $"{thesPassengerName} has been added to the standby queue.");
+
+                return null!;
             }
             int aiBookingId = myoBookings.Count + 1;
             var aoNewBooking = new Booking(aiBookingId, theiFlightId, thesPassengerName, thesPassportNumber, thesSeatNumber, status, aoFlight);
@@ -360,6 +374,96 @@ namespace Final
 
             return aoResults;
         }
+      
+        /// <summary>
+        /// Add standby passenger to a flight.
+        /// </summary>
+        public void AddStandbyPassenger(
+            int theiFlightId,
+            string thesPassengerName,
+            string thesPassportNumber,
+            int theiPriority)
+        {
+            Flight? aoFlight = myoFlights
+                .FirstOrDefault(f => f.FlightId == theiFlightId);
+
+            if (aoFlight == null)
+                throw new InvalidOperationException("Flight does not exist.");
+
+            aoFlight.StandbyQueue.Enqueue(
+                new StandbyPassenger(
+                    thesPassengerName,
+                    thesPassportNumber,
+                    theiPriority));
+        }
+        /// <summary>
+        /// Q9-mm) -Promotes the highest priority passenger from standby.
+        /// </summary>
+        public Booking? PromoteFromStandby(int theiFlightId)
+        {
+            Flight? aoFlight = myoFlights
+                .FirstOrDefault(aoFlight => aoFlight.FlightId == theiFlightId);
+
+            if (aoFlight == null)
+            {
+                throw new InvalidOperationException("Flight does not exist.");
+            }
+
+            int aiConfirmedBookings =
+                myoBookings.Count(
+                    aoBooking =>
+                        aoBooking.FlightId == theiFlightId &&
+                        aoBooking.Status == BookingStatus.Confirmed);
+
+            if (aiConfirmedBookings >= aoFlight.TotalSeats)
+            {
+                throw new InvalidOperationException("No available seats.");
+            }
+
+            if (aoFlight.StandbyQueue.Count() == 0)
+            {
+                Console.WriteLine("Standby queue is empty.");
+                return null;
+            }
+
+            StandbyPassenger aoPassenger =
+                aoFlight.StandbyQueue.Dequeue();
+
+            int aiBookingId = myoBookings.Count + 1;
+
+            Booking aoBooking =
+                new Booking(
+                    aiBookingId,
+                    aoFlight.FlightId,
+                    aoPassenger.PassengerName,
+                    aoPassenger.PassportNumber,
+                    "AUTO",
+                    BookingStatus.Confirmed,
+                    aoFlight);
+
+            myoBookings.Add(aoBooking);
+
+            Console.WriteLine(
+                $"{aoPassenger.PassengerName} promoted from standby queue.");
+
+            return aoBooking;
+        }
+        /// <summary>
+        ///Q9-mm)- Cancels a booking.
+        /// </summary>
+        public void CancelBooking(int theiBookingId)
+        {
+            Booking? aoBooking = myoBookings
+                .FirstOrDefault(aoBooking => aoBooking.BookingId == theiBookingId);
+
+            if (aoBooking == null)
+            {
+                throw new InvalidOperationException("Booking not found.");
+            }
+
+            aoBooking.Status = BookingStatus.Cancelled;
+
+            Console.WriteLine($"Booking {theiBookingId} has been cancelled.");
 
         /// <summary>
         /// Hủy một đặt chỗ đã có.
