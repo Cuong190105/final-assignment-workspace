@@ -1,4 +1,4 @@
-﻿namespace Final
+namespace Final
 {
     public class Program
     {
@@ -168,6 +168,41 @@
                 Console.WriteLine("Không tìm thấy chuyến bay");
             }
 
+            // Q7 Demo
+            Console.WriteLine("Thực hiện thêm 3 bookings");
+            Booking aoB1 = aoManager.AddBooking(1, "Nguyen Van A", "P000101", "15A", BookingStatus.Confirmed);
+            Booking aoB2 = aoManager.AddBooking(1, "Tran Thi B", "P000102", "15B", BookingStatus.Pending);
+            Booking aoB3 = aoManager.AddBooking(1, "Le Van C", "P000103", "15C", BookingStatus.Confirmed);
+            
+            Console.WriteLine($"Đã thêm: {aoB1.PassengerName} (ID: {aoB1.BookingId}, Trạng thái: {aoB1.Status})");
+            Console.WriteLine($"Đã thêm: {aoB2.PassengerName} (ID: {aoB2.BookingId}, Trạng thái: {aoB2.Status})");
+            Console.WriteLine($"Đã thêm: {aoB3.PassengerName} (ID: {aoB3.BookingId}, Trạng thái: {aoB3.Status})");
+
+            // Hủy booking 3
+            Console.WriteLine($"Thực hiện hủy booking vừa thêm (ID: {aoB3.BookingId})");
+            aoManager.CancelBooking(aoB3.BookingId);
+            Console.WriteLine($"Trạng thái Booking {aoB3.BookingId} sau khi hủy: {aoB3.Status}");
+
+            // Thực hiện Undo lần 1 (Hoàn tác việc Hủy booking 3 -> Khôi phục lại trạng thái Confirmed)
+            Console.WriteLine("Thực hiện Undo lần 1 (Hoàn tác việc hủy)");
+            aoManager.UndoLastBookingAction();
+            Console.WriteLine($"Trạng thái Booking {aoB3.BookingId} sau khi Undo hủy: {aoB3.Status} (Mong đợi: Confirmed)");
+
+            // Thực hiện Undo lần 2 (Hoàn tác việc Thêm booking 3 -> Xóa booking 3 khỏi hệ thống)
+            Console.WriteLine("Thực hiện Undo lần 2 (Hoàn tác việc thêm Booking 3)");
+            aoManager.UndoLastBookingAction();
+            // Thử tìm lại xem còn tồn tại không
+            bool abExistsB3 = aoManager.GetConfirmedBookingsForFlight(1).Any(b => b.BookingId == aoB3.BookingId);
+            Console.WriteLine($"Booking {aoB3.BookingId} còn tồn tại trong hệ thống không? {abExistsB3} (Mong đợi: False)");
+
+            // Thực hiện Undo lần 3 (Hoàn tác việc Thêm booking 2 -> Xóa booking 2)
+            Console.WriteLine("Thực hiện Undo lần 3 (Hoàn tác việc thêm Booking 2)");
+            aoManager.UndoLastBookingAction();
+
+            // Thực hiện Undo lần 4 (Hoàn tác việc Thêm booking 1 -> Xóa booking 1)
+            Console.WriteLine("Thực hiện Undo lần 4 (Hoàn tác việc thêm Booking 1)");
+            aoManager.UndoLastBookingAction();
+            Console.WriteLine("Undo hoàn thành thành công tất cả các bước.");
         }
     }
 }
