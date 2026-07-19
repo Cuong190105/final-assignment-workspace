@@ -11,6 +11,7 @@
         private int myiDurationMinutes;
         private int myiTotalSeats;
         private decimal mydPricePerSeat;
+        private StandbyQueue myoStandbyQueue;
 
         public Flight(int flightId, int airlineId, string flightCode, string origin, string destination, DateTime departureTime, int durationMinutes, int totalSeats, decimal pricePerSeat)
         {
@@ -23,6 +24,7 @@
             DurationMinutes = durationMinutes;
             TotalSeats = totalSeats;
             PricePerSeat = pricePerSeat;
+            myoStandbyQueue = new StandbyQueue();
         }
 
         public int FlightId
@@ -119,6 +121,10 @@
                 }
                 mydPricePerSeat = value;
             }
+        }
+        public StandbyQueue StandbyQueue
+        {
+            get => myoStandbyQueue;
         }
         public override string EntityType => "Flight";
 
