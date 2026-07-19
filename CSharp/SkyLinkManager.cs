@@ -516,6 +516,7 @@ namespace Final
 
             return aoBooking;
         }
+        /*
         /// <summary>
         ///Q9-mm)- Cancels a booking.
         /// </summary>
@@ -532,6 +533,102 @@ namespace Final
             aoBooking.Status = BookingStatus.Cancelled;
 
             Console.WriteLine($"Booking {theiBookingId} has been cancelled.");
+        }
+        */
+        // ======================= Q10 ===============================
+        
+        // Truy cập dữ liệu trong Program.cs
+        public List<Airline> Airlines => myoAirlines;
+        public List<Flight> Flights => myoFlights;
+        public List<Booking> Bookings => myoBookings;
+        
+        /// <summary>
+        /// Q10 - Add a Business Flight
+        /// </summary>
+        public BusinessFlight AddBusinessFlight(
+            int theiAirlineId,
+            string thesOrigin,
+            string thesDestination,
+            DateTime theoDepartureTime,
+            int theiDurationMinutes,
+            int theiTotalSeats,
+            decimal thedPricePerSeat,
+            bool thebLoungeAccess,
+            bool thebMealIncluded,
+            decimal thedPremiumSurcharge)
+        {
+            Airline? aoAirline =
+                myoAirlines.FirstOrDefault(
+                    aoAirline => aoAirline.AirlineId == theiAirlineId);
+        
+            if (aoAirline == null)
+            {
+                throw new InvalidOperationException("Airline does not exist.");
+            }
+        
+            int aiFlightId = myoFlights.Count + 1;
+        
+            string asFlightCode =
+                GenerateFlightCode(
+                    aoAirline.IATACode,
+                    thesOrigin,
+                    aiFlightId);
+        
+            BusinessFlight aoBusinessFlight =
+                new BusinessFlight(
+                    aiFlightId,
+                    theiAirlineId,
+                    asFlightCode,
+                    thesOrigin,
+                    thesDestination,
+                    theoDepartureTime,
+                    theiDurationMinutes,
+                    theiTotalSeats,
+                    thedPricePerSeat,
+                    thebLoungeAccess,
+                    thebMealIncluded,
+                    thedPremiumSurcharge);
+        
+            myoFlights.Add(aoBusinessFlight);
+        
+            return aoBusinessFlight;
+        }
+        
+        /// <summary>
+        /// Q10 - Total confirmed revenue
+        /// </summary>
+        public decimal GetTotalRevenue()
+        {
+            return myoBookings
+                .Where(aoBooking =>
+                    aoBooking.Status == BookingStatus.Confirmed)
+                .Sum(aoBooking => aoBooking.BookingFee);
+        }
+        
+        /// <summary>
+        /// Q10 - Total standby passengers of an airline
+        /// </summary>
+        public int GetStandbyCount(int theiAirlineId)
+        {
+            return myoFlights
+                .Where(aoFlight =>
+                    aoFlight.AirlineId == theiAirlineId)
+                .Sum(aoFlight =>
+                    aoFlight.StandbyQueue.Count());
+        }
+        
+        /// <summary>
+        /// Q10 - Get all SkyEntity objects
+        /// </summary>
+        public List<SkyEntity> GetAllEntities()
+        {
+            List<SkyEntity> aoEntities = new();
+        
+            aoEntities.AddRange(myoAirlines);
+            aoEntities.AddRange(myoFlights);
+            aoEntities.AddRange(myoBookings);
+        
+            return aoEntities;
         }
     }
 }
