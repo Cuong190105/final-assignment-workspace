@@ -28,6 +28,8 @@ CREATE TABLE Doctor (
 
 	CONSTRAINT PK_Doctor PRIMARY KEY (id),
 	CONSTRAINT FK_Doctor_Department FOREIGN KEY (department_id) REFERENCES Department(id),
+	CONSTRAINT UQ_Doctor_Email UNIQUE (email),
+	CONSTRAINT UQ_Doctor_Phone UNIQUE (phone)
 );
 CREATE TABLE Patient (
 	id INT IDENTITY(1, 1),
@@ -46,7 +48,7 @@ CREATE TABLE Appointment (
 	id INT IDENTITY(1, 1),
 	appointment_datetime DATETIME NOT NULL,
 	reason NVARCHAR(255) NOT NULL,
-	status VARCHAR(20) NOT NULL,
+	status VARCHAR(20) NOT NULL DEFAULT 'upcoming',
 	patient_id INT NOT NULL,
 	doctor_id INT NOT NULL,
 	is_active BIT NOT NULL DEFAULT 1,
