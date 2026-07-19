@@ -20,5 +20,12 @@
         {
             return $"{base.GetInfo()}, Lounge Access: {LoungeAccess}, Meal Included: {MealIncluded}, Premium Surcharge: {PremiumSurcharge}";
         }
+        /// <summary>
+        /// Returns a summary of the Business Flight.
+        /// </summary>
+        public override string GetSummary()
+        {
+            return $"Business Flight - {FlightCode} ({Origin} -> {Destination})";
+        }
     }
 }
