@@ -314,7 +314,23 @@ namespace Final
                     true,
                     true,
                     1500000);
-            
+            BusinessFlight aoBusinessFlight2 =
+                aoManager.AddBusinessFlight(
+                    2,
+                    "SGN",
+                    "BKK",
+                    DateTime.Now.AddDays(12),
+                    120,
+                    40,
+                    4500000,
+                    true,
+                    false,
+                    1000000);
+
+            Console.WriteLine();
+            Console.WriteLine("Business Flight 2 Created:");
+            Console.WriteLine(aoBusinessFlight2.GetInfo());
+            Console.WriteLine(aoBusinessFlight2.GetSummary());
             Console.WriteLine("Business Flight Created:");
             Console.WriteLine(aoBusinessFlight.GetInfo());
             
