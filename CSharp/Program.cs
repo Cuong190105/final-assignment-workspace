@@ -1,3 +1,4 @@
+using System.Text;
 namespace Final
 {
     public class Program
@@ -352,12 +353,12 @@ namespace Final
             }
             
             Console.WriteLine("Standby Queue Flight 6");
-            foreach (var aoPassenger in
-                aoManager.Flights.First(f => f.FlightId == 6)
-                    .StandbyQueue.GetAllPassengers())
+            var aoStandbyQueue = aoManager.Flights.First(f => f.FlightId == 6).StandbyQueue;
+            while (aoStandbyQueue.Count() > 0)
             {
+                var aoStandbyPassenger = aoStandbyQueue.Dequeue();
                 Console.WriteLine(
-                    $"{aoPassenger.PassengerName} - Priority {aoPassenger.Priority}");
+                    $"{aoStandbyPassenger.PassengerName} - Priority {aoStandbyPassenger.Priority}");
             }
             // ==========================================================
             // Group Summary by EntityType (tt)

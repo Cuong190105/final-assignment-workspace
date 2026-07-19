@@ -65,14 +65,10 @@ nunit-*.xml
 /.vs/slnx.sqlite
 /.vs/VSWorkspaceState.json
 .vs/
-<<<<<<< HEAD
 *.docx
 *.zip
 /CSharp/.vs/Final/CopilotIndices/18.8.1083.22234
 /CSharp/Final.slnx
-=======
-/.vs/final-assignment-workspace.slnx/FileContentIndex/ceebb8e2-ab84-4ce8-ba03-47947af501b5.vsidx
->>>>>>> e78cc86a0c923397c5e78ed43883ac2c8aaf4370
 /CSharp/.vs/ProjectEvaluation
 /CSharp/.vs/Final.slnx/FileContentIndex/338352ef-a872-4658-9cf4-1acfc550c5b3.vsidx
 /CSharp/.vs/Final.slnx/FileContentIndex/905ab79f-41e0-4ae6-8ee9-0ace47a2cadf.vsidx
