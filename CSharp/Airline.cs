@@ -58,5 +58,13 @@
         {
             return $"Airline ID: {AirlineId}, Name: {AirlineName}, IATA Code: {IATACode}, Country: {Country}, Founded Year: {FoundedYear}";
         }
+
+        /// <summary>
+        /// Returns a summary of the airline's information.
+        /// </summary>
+        public override string GetSummary()
+        {
+            return $"This is the {AirlineName} airline, founded in {FoundedYear}.";
+        }
     }
 }

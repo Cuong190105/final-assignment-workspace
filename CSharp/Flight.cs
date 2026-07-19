@@ -135,5 +135,13 @@
         {
             return $"Flight ID: {FlightId}, Airline ID: {AirlineId}, Flight Code: {FlightCode}, Origin: {Origin}, Destination: {Destination}, Departure Time: {DepartureTime}, Duration: {DurationMinutes} minutes, Total Seats: {TotalSeats}, Price Per Seat: {PricePerSeat}";
         }
+
+        /// <summary>
+        /// Returns a summary of the flight's information, including flight code, origin, destination, and departure time.
+        /// </summary>
+        public override string GetSummary()
+        {
+            return $"Flight {FlightCode} from {Origin} to {Destination} departing at {DepartureTime}";
+        }
     }
 }

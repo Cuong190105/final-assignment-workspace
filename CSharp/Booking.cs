@@ -92,5 +92,13 @@ namespace Final
         {
             return $"Booking ID: {BookingId}, Flight ID: {FlightId}, Passenger Name: {PassengerName}, Passport Number: {PassportNumber}, Seat Number: {SeatNumber}, Status: {Status}, Booking Fee: {BookingFee}";
         }
+
+        /// <summary>
+        /// Returns a summary of the booking information, including passenger name and flight ID.
+        /// </summary>
+        public override string GetSummary()
+        {
+            return $"Booking for {PassengerName} on flight {FlightId}";
+        }
     }
 }
