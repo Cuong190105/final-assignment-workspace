@@ -350,72 +350,81 @@ namespace Final
                 Console.WriteLine(aoEntity.GetInfo());
                 Console.WriteLine(aoEntity.GetSummary());
             }
+            
+            Console.WriteLine("Standby Queue Flight 6");
+            foreach (var aoPassenger in
+                aoManager.Flights.First(f => f.FlightId == 6)
+                    .StandbyQueue.GetAllPassengers())
+            {
+                Console.WriteLine(
+                    $"{aoPassenger.PassengerName} - Priority {aoPassenger.Priority}");
+            }
             // ==========================================================
-        // Group Summary by EntityType (tt)
-        // ==========================================================
-        Console.WriteLine();
-        Console.WriteLine("===== Grouped Summary By Entity Type =====");
-        
-        var aoGroups = aoManager.GetAllEntities()
-            .GroupBy(e => e.EntityType);
-        
-        foreach (var aoGroup in aoGroups)
-        {
-            Console.WriteLine($"{aoGroup.Key}: {aoGroup.Count()} objects");
-        }
-        
-        // ==========================================================
-        // System-wide Summary Table (uu)
-        // ==========================================================
-        Console.WriteLine();
-        Console.WriteLine("============= SYSTEM SUMMARY =============");
-        
-        Console.WriteLine(
-            $"{"Airline",-20} {"Flights",8} {"Bookings",10} {"Revenue",15} {"Standby",10}");
-        
-        foreach (var aoAirline in aoManager.Airlines)
-        {
-            int aiFlights =
-                aoManager.Flights.Count(f =>
-                    f.AirlineId == aoAirline.AirlineId);
-        
-            int aiBookings =
-                aoManager.Bookings.Count(b =>
-                {
-                    Flight? aoFlight =
-                        aoManager.Flights.FirstOrDefault(f =>
-                            f.FlightId == b.FlightId);
-        
-                    return aoFlight != null &&
-                           aoFlight.AirlineId == aoAirline.AirlineId;
-                });
-        
-            decimal adRevenue =
-                aoManager.Bookings
-                    .Where(b => b.Status == BookingStatus.Confirmed)
-                    .Where(b =>
+            // Group Summary by EntityType (tt)
+            // ==========================================================
+            Console.WriteLine();
+            Console.WriteLine("===== Grouped Summary By Entity Type =====");
+            
+            var aoGroups = aoManager.GetAllEntities()
+                .GroupBy(e => e.EntityType);
+            
+            foreach (var aoGroup in aoGroups)
+            {
+                Console.WriteLine($"{aoGroup.Key}: {aoGroup.Count()} objects");
+            }
+            
+            // ==========================================================
+            // System-wide Summary Table (uu)
+            // ==========================================================
+            Console.WriteLine();
+            Console.WriteLine("============= SYSTEM SUMMARY =============");
+            
+            Console.WriteLine(
+                $"{"Airline",-20} {"Flights",8} {"Bookings",10} {"Revenue",15} {"Standby",10}");
+            
+            foreach (var aoAirline in aoManager.Airlines)
+            {
+                int aiFlights =
+                    aoManager.Flights.Count(f =>
+                        f.AirlineId == aoAirline.AirlineId);
+            
+                int aiBookings =
+                    aoManager.Bookings.Count(b =>
                     {
                         Flight? aoFlight =
                             aoManager.Flights.FirstOrDefault(f =>
                                 f.FlightId == b.FlightId);
-        
+            
                         return aoFlight != null &&
                                aoFlight.AirlineId == aoAirline.AirlineId;
-                    })
-                    .Sum(b => b.BookingFee);
-        
-            int aiStandby =
-                aoManager.GetStandbyCount(aoAirline.AirlineId);
-        
-            Console.WriteLine(
-                $"{aoAirline.AirlineName,-20} " +
-                $"{aiFlights,8} " +
-                $"{aiBookings,10} " +
-                $"{adRevenue,15:C} " +
-                $"{aiStandby,10}");
-        }
-        
-        Console.WriteLine("==========================================");
+                    });
+            
+                decimal adRevenue =
+                    aoManager.Bookings
+                        .Where(b => b.Status == BookingStatus.Confirmed)
+                        .Where(b =>
+                        {
+                            Flight? aoFlight =
+                                aoManager.Flights.FirstOrDefault(f =>
+                                    f.FlightId == b.FlightId);
+            
+                            return aoFlight != null &&
+                                   aoFlight.AirlineId == aoAirline.AirlineId;
+                        })
+                        .Sum(b => b.BookingFee);
+            
+                int aiStandby =
+                    aoManager.GetStandbyCount(aoAirline.AirlineId);
+            
+                Console.WriteLine(
+                    $"{aoAirline.AirlineName,-20} " +
+                    $"{aiFlights,8} " +
+                    $"{aiBookings,10} " +
+                    $"{adRevenue,15:C} " +
+                    $"{aiStandby,10}");
+            }
+            
+            Console.WriteLine("==========================================");
         }
     }
 }
