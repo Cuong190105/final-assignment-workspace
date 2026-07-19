@@ -295,7 +295,45 @@ namespace Final
                 Console.WriteLine($"Status    : {aoPromoted.Status}");
             }
 
-            Console.WriteLine("======================================");    
+            Console.WriteLine("======================================");   
+            
+            // ======================= Q10 ===============================
+            Console.WriteLine();
+            Console.WriteLine("========== Q10 Demonstration ==========");
+            
+            // Thêm Business Flight
+            BusinessFlight aoBusinessFlight =
+                aoManager.AddBusinessFlight(
+                    1,
+                    "HAN",
+                    "SIN",
+                    DateTime.Now.AddDays(10),
+                    180,
+                    50,
+                    5000000,
+                    true,
+                    true,
+                    1500000);
+            
+            Console.WriteLine("Business Flight Created:");
+            Console.WriteLine(aoBusinessFlight.GetInfo());
+            
+            Console.WriteLine();
+            Console.WriteLine($"Total Revenue: {aoManager.GetTotalRevenue():C}");
+            
+            Console.WriteLine();
+            Console.WriteLine($"Standby passengers of Airline 3: {aoManager.GetStandbyCount(3)}");
+            
+            Console.WriteLine();
+            Console.WriteLine("All SkyEntity objects:");
+            
+            foreach (SkyEntity aoEntity in aoManager.GetAllEntities())
+            {
+                Console.WriteLine("--------------------------------");
+                Console.WriteLine($"Type: {aoEntity.EntityType}");
+                Console.WriteLine(aoEntity.GetInfo());
+                Console.WriteLine(aoEntity.GetSummary());
+            }
         }
     }
 }
