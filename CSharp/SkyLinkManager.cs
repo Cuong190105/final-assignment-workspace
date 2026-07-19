@@ -1,4 +1,4 @@
-﻿using System.Text;
+using System.Text;
 
 namespace Final
 {
@@ -7,6 +7,7 @@ namespace Final
         private List<Airline> myoAirlines;
         private List<Flight> myoFlights;
         private List<Booking> myoBookings;
+        private SkyStack<Booking> myoBookingHistory;
 
         private static SkyLinkManager? myoInstance;
         private SkyLinkManager()
@@ -14,6 +15,7 @@ namespace Final
             myoAirlines = new List<Airline>();
             myoFlights = new List<Flight>();
             myoBookings = new List<Booking>();
+            myoBookingHistory = new SkyStack<Booking>();
         }
 
         /// <summary>
@@ -125,6 +127,8 @@ namespace Final
             int aiBookingId = myoBookings.Count + 1;
             var aoNewBooking = new Booking(aiBookingId, theiFlightId, thesPassengerName, thesPassportNumber, thesSeatNumber, status, aoFlight);
             myoBookings.Add(aoNewBooking);
+            // Lưu lịch sử hành động thêm đặt chỗ
+            myoBookingHistory.Push(aoNewBooking.Clone());
             return aoNewBooking;
         }
 
@@ -370,6 +374,10 @@ namespace Final
 
             return aoResults;
         }
+      
+        /// <summary>
+        /// Add standby passenger to a flight.
+        /// </summary>
         public void AddStandbyPassenger(
             int theiFlightId,
             string thesPassengerName,
@@ -456,6 +464,65 @@ namespace Final
             aoBooking.Status = BookingStatus.Cancelled;
 
             Console.WriteLine($"Booking {theiBookingId} has been cancelled.");
+
+        /// <summary>
+        /// Hủy một đặt chỗ đã có.
+        /// Tìm đặt chỗ theo ID, lưu trạng thái trước đó, chuyển trạng thái thành Cancelled
+        /// và đưa một bản sao lưu trữ của đặt chỗ (với trạng thái mới) vào Stack lịch sử.
+        /// </summary>
+        /// <param name="theiBookingId">ID của đặt chỗ cần hủy.</param>
+        /// <exception cref="InvalidOperationException">Ném ra nếu đặt chỗ không tồn tại.</exception>
+        public void CancelBooking(int theiBookingId)
+        {
+            Booking? aoBooking = myoBookings.FirstOrDefault(b => b.BookingId == theiBookingId);
+            if (aoBooking == null)
+            {
+                throw new InvalidOperationException($"Không tìm thấy đặt chỗ với ID {theiBookingId}");
+            }
+
+            // Lưu trạng thái trước khi hủy
+            aoBooking.PreviousStatus = aoBooking.Status;
+            aoBooking.Status = BookingStatus.Cancelled;
+
+            // Đưa bản sao của Booking sau khi hủy vào Stack lịch sử
+            myoBookingHistory.Push(aoBooking.Clone());
+        }
+
+        /// <summary>
+        /// Hoàn tác hành động đặt chỗ cuối cùng (thêm hoặc hủy).
+        /// Lấy hành động gần nhất từ Stack lịch sử và đảo ngược nó.
+        /// </summary>
+        /// <exception cref="InvalidOperationException">Ném ra nếu lịch sử rỗng.</exception>
+        public void UndoLastBookingAction()
+        {
+            if (myoBookingHistory.IsEmpty())
+            {
+                throw new InvalidOperationException("Không có hành động nào để hoàn tác.");
+            }
+
+            // Lấy hành động booking gần nhất từ Stack
+            Booking aoPopped = myoBookingHistory.Pop();
+
+            // Tìm Booking thực tế trong hệ thống bằng ID
+            Booking? aoActual = myoBookings.FirstOrDefault(b => b.BookingId == aoPopped.BookingId);
+
+            if (aoPopped.Status == BookingStatus.Cancelled)
+            {
+                // Nếu hành động trước đó là hủy, phục hồi lại trạng thái trước khi hủy
+                if (aoActual != null)
+                {
+                    aoActual.Status = aoPopped.PreviousStatus ?? BookingStatus.Confirmed;
+                    aoActual.PreviousStatus = null;
+                }
+            }
+            else if (aoPopped.Status == BookingStatus.Confirmed || aoPopped.Status == BookingStatus.Pending)
+            {
+                // Nếu hành động trước đó là thêm mới (Confirmed hoặc Pending), xóa khỏi hệ thống
+                if (aoActual != null)
+                {
+                    myoBookings.Remove(aoActual);
+                }
+            }
         }
     }
 }
