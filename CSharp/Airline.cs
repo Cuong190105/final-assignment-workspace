@@ -50,9 +50,21 @@
             set => myiFoundedYear = value;
         }
         public override string EntityType => "Airline";
+
+        /// <summary>
+        /// Returns a string representation of the airline's information.
+        /// </summary>
         public override string GetInfo()
         {
             return $"Airline ID: {AirlineId}, Name: {AirlineName}, IATA Code: {IATACode}, Country: {Country}, Founded Year: {FoundedYear}";
+        }
+
+        /// <summary>
+        /// Returns a summary of the airline's information.
+        /// </summary>
+        public override string GetSummary()
+        {
+            return $"This is the {AirlineName} airline, founded in {FoundedYear}.";
         }
     }
 }

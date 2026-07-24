@@ -11,6 +11,7 @@
         private int myiDurationMinutes;
         private int myiTotalSeats;
         private decimal mydPricePerSeat;
+        private StandbyQueue myoStandbyQueue;
 
         public Flight(int flightId, int airlineId, string flightCode, string origin, string destination, DateTime departureTime, int durationMinutes, int totalSeats, decimal pricePerSeat)
         {
@@ -23,6 +24,7 @@
             DurationMinutes = durationMinutes;
             TotalSeats = totalSeats;
             PricePerSeat = pricePerSeat;
+            myoStandbyQueue = new StandbyQueue();
         }
 
         public int FlightId
@@ -120,10 +122,26 @@
                 mydPricePerSeat = value;
             }
         }
+        public StandbyQueue StandbyQueue
+        {
+            get => myoStandbyQueue;
+        }
         public override string EntityType => "Flight";
+
+        /// <summary>
+        /// Returns a string representation of the flight's information, including flight ID, airline ID, flight code, origin, destination, departure time, duration, total seats, and price per seat.
+        /// </summary>
         public override string GetInfo()
         {
             return $"Flight ID: {FlightId}, Airline ID: {AirlineId}, Flight Code: {FlightCode}, Origin: {Origin}, Destination: {Destination}, Departure Time: {DepartureTime}, Duration: {DurationMinutes} minutes, Total Seats: {TotalSeats}, Price Per Seat: {PricePerSeat}";
+        }
+
+        /// <summary>
+        /// Returns a summary of the flight's information, including flight code, origin, destination, and departure time.
+        /// </summary>
+        public override string GetSummary()
+        {
+            return $"Flight {FlightCode} from {Origin} to {Destination} departing at {DepartureTime}";
         }
     }
 }
