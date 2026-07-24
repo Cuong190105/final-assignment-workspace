@@ -15,7 +15,7 @@ const COURSES = [
         lessons: 12,
         price: 0,
         thumbClass: "thumb-web-dev",
-        icon: "bi-code-slash"
+        icon: "bi-code-slash",
     },
     {
         id: 2,
@@ -27,7 +27,7 @@ const COURSES = [
         lessons: 20,
         price: 89,
         thumbClass: "thumb-web-dev",
-        icon: "bi-braces"
+        icon: "bi-braces",
     },
     {
         id: 3,
@@ -39,7 +39,7 @@ const COURSES = [
         lessons: 8,
         price: 49,
         thumbClass: "thumb-design",
-        icon: "bi-palette"
+        icon: "bi-palette",
     },
     {
         id: 4,
@@ -51,7 +51,7 @@ const COURSES = [
         lessons: 10,
         price: 39,
         thumbClass: "thumb-design",
-        icon: "bi-vector-pen"
+        icon: "bi-vector-pen",
     },
     {
         id: 5,
@@ -63,7 +63,7 @@ const COURSES = [
         lessons: 24,
         price: 99,
         thumbClass: "thumb-data-science",
-        icon: "bi-bar-chart-line"
+        icon: "bi-bar-chart-line",
     },
     {
         id: 6,
@@ -75,7 +75,7 @@ const COURSES = [
         lessons: 14,
         price: 59,
         thumbClass: "thumb-data-science",
-        icon: "bi-graph-up"
+        icon: "bi-graph-up",
     },
     {
         id: 7,
@@ -87,7 +87,7 @@ const COURSES = [
         lessons: 9,
         price: 0,
         thumbClass: "thumb-marketing",
-        icon: "bi-megaphone"
+        icon: "bi-megaphone",
     },
     {
         id: 8,
@@ -99,15 +99,15 @@ const COURSES = [
         lessons: 16,
         price: 69,
         thumbClass: "thumb-marketing",
-        icon: "bi-search"
-    }
+        icon: "bi-search",
+    },
 ];
 
 // Current UI state for filtering/sorting the course grid
 const state = {
     searchTerm: "",
     activeCategory: "All",
-    sortBy: "default"
+    sortBy: "default",
 };
 
 // Formats a numeric price into a display string ("FREE" or "$49")
@@ -151,7 +151,8 @@ function buildCourseCard(course) {
 function getFilteredCourses() {
     let list = COURSES.filter((course) => {
         const matchesCategory =
-            state.activeCategory === "All" || course.category === state.activeCategory;
+            state.activeCategory === "All" ||
+            course.category === state.activeCategory;
 
         const term = state.searchTerm.trim().toLowerCase();
         const matchesSearch =
@@ -242,10 +243,102 @@ function initSort() {
     });
 }
 
+function setAuthMessage(message, type = "success") {
+    const alertBox = document.getElementById("authMessage");
+
+    if (!alertBox) {
+        return;
+    }
+
+    alertBox.className = `alert alert-${type} auth-message show`;
+    alertBox.textContent = message;
+}
+
+function togglePassword(button) {
+    const targetId = button.getAttribute("data-target");
+    const input = document.getElementById(targetId);
+
+    if (!input) {
+        return;
+    }
+
+    const isPassword = input.type === "password";
+    input.type = isPassword ? "text" : "password";
+    button.innerHTML = isPassword
+        ? '<i class="bi bi-eye-slash"></i>'
+        : '<i class="bi bi-eye"></i>';
+    button.setAttribute(
+        "aria-label",
+        isPassword ? "Hide password" : "Show password",
+    );
+}
+
+function handleAuthSubmit(form) {
+    form.addEventListener("submit", (event) => {
+        event.preventDefault();
+
+        if (!form.checkValidity()) {
+            form.classList.add("was-validated");
+            setAuthMessage("Please fill in all required fields.", "danger");
+            return;
+        }
+
+        const authMode = form.dataset.authMode;
+
+        if (authMode === "signup") {
+            const password = form.querySelector("#signupPassword");
+            const confirmPassword = form.querySelector(
+                "#signupConfirmPassword",
+            );
+
+            if (
+                password &&
+                confirmPassword &&
+                password.value !== confirmPassword.value
+            ) {
+                confirmPassword.setCustomValidity("Passwords do not match");
+                form.reportValidity();
+                confirmPassword.setCustomValidity("");
+                setAuthMessage("Passwords do not match.", "danger");
+                return;
+            }
+        }
+
+        setAuthMessage(
+            authMode === "signup"
+                ? "Account created successfully. Redirecting to login..."
+                : "Login successful. Redirecting to courses...",
+        );
+
+        window.setTimeout(() => {
+            window.location.href =
+                authMode === "signup" ? "login.html" : "index.html";
+        }, 900);
+    });
+}
+
+function initAuthPage() {
+    const authForms = document.querySelectorAll("[data-auth-form]");
+
+    if (authForms.length === 0) {
+        return;
+    }
+
+    authForms.forEach(handleAuthSubmit);
+
+    document.querySelectorAll("[data-password-toggle]").forEach((button) => {
+        button.addEventListener("click", () => togglePassword(button));
+    });
+}
+
 // Entry point: runs once the DOM is ready
 document.addEventListener("DOMContentLoaded", () => {
-    initSearch();
-    initCategoryTabs();
-    initSort();
-    renderCourses();
+    if (document.getElementById("courseGrid")) {
+        initSearch();
+        initCategoryTabs();
+        initSort();
+        renderCourses();
+    }
+
+    initAuthPage();
 });
