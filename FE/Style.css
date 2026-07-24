@@ -233,3 +233,211 @@ footer {
         text-align: center;
     }
 }
+
+/* Search box in navbar */
+.search-wrapper {
+    position: relative;
+    width: 260px;
+}
+
+.search-input {
+    border-radius: 20px;
+    padding: 8px 36px 8px 16px;
+    border: 1px solid var(--border);
+    width: 100%;
+    font-size: 14px;
+    outline: none;
+    transition: .3s;
+}
+
+    .search-input:focus {
+        border-color: var(--primary);
+        box-shadow: 0 0 0 .15rem rgba(13, 110, 253, .15);
+    }
+
+.search-icon {
+    position: absolute;
+    right: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--secondary);
+    pointer-events: none;
+}
+
+.search-clear {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--secondary);
+    cursor: pointer;
+    background: none;
+    border: none;
+    display: none;
+    font-size: 16px;
+    line-height: 1;
+}
+
+.search-wrapper.has-text .search-icon {
+    display: none;
+}
+
+.search-wrapper.has-text .search-clear {
+    display: block;
+}
+
+/* Category tabs */
+.category-tabs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin: 30px 0;
+}
+
+.tab-btn {
+    border: 1px solid var(--border);
+    background: var(--white);
+    color: var(--dark);
+    padding: 8px 20px;
+    border-radius: 30px;
+    font-weight: 600;
+    font-size: 14px;
+    cursor: pointer;
+    transition: .25s;
+}
+
+    .tab-btn:hover {
+        border-color: var(--primary);
+        color: var(--primary);
+    }
+
+    .tab-btn.active {
+        background: var(--primary);
+        border-color: var(--primary);
+        color: var(--white);
+    }
+
+/* Toolbar */
+.toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.results-count {
+    color: var(--secondary);
+    font-size: 14px;
+}
+
+.sort-select {
+    width: auto;
+    min-width: 200px;
+}
+
+/* Course thumbnail placeholder */
+.course-image.thumb-placeholder {
+    height: 220px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 42px;
+    color: var(--white);
+}
+
+.thumb-web-dev { background: linear-gradient(135deg, #0d6efd, #6610f2); }
+.thumb-design { background: linear-gradient(135deg, #fd7e14, #dc3545); }
+.thumb-data-science { background: linear-gradient(135deg, #198754, #20c997); }
+.thumb-marketing { background: linear-gradient(135deg, #ffc107, #fd7e14); }
+
+/* Course meta rows */
+.course-meta {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 14px;
+    color: var(--secondary);
+    margin-bottom: 6px;
+}
+
+.course-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 14px;
+    padding-top: 14px;
+    border-top: 1px solid var(--border);
+}
+
+.badge-category {
+    display: inline-block;
+    font-size: 12px;
+    font-weight: 600;
+    padding: 4px 10px;
+    border-radius: 20px;
+    background: var(--light);
+    color: var(--primary);
+    margin-bottom: 10px;
+}
+
+/* No courses found state */
+.no-courses {
+    text-align: center;
+    padding: 60px 20px;
+    color: var(--secondary);
+    display: none;
+}
+
+    .no-courses.show {
+        display: block;
+    }
+
+    .no-courses i {
+        font-size: 48px;
+        margin-bottom: 16px;
+        color: var(--border);
+    }
+
+/* Footer links */
+.footer-title {
+    font-weight: 700;
+    margin-bottom: 16px;
+}
+
+.footer-link {
+    display: block;
+    color: #adb5bd;
+    margin-bottom: 10px;
+    transition: .3s;
+}
+
+    .footer-link:hover {
+        color: var(--white);
+    }
+
+.footer-bottom {
+    border-top: 1px solid #495057;
+    margin-top: 30px;
+    padding-top: 20px;
+    text-align: center;
+    color: #adb5bd;
+    font-size: 14px;
+}
+
+@media (max-width: 768px) {
+    .search-wrapper {
+        width: 100%;
+        margin: 10px 0;
+    }
+
+    .toolbar {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .sort-select {
+        width: 100%;
+    }
+}
