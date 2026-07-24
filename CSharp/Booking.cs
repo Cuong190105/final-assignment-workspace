@@ -1,4 +1,4 @@
-﻿namespace Final
+namespace Final
 {
     public class Booking : SkyEntity
     {
@@ -8,6 +8,7 @@
         private string mysPassportNumber;
         private string mysSeatNumber;
         private BookingStatus myoStatus;
+        private BookingStatus? myoPreviousStatus;
         private decimal mydBookingFee;
         private Flight myoFlight;
         private static readonly decimal BookingFeePercentage = 0.05m;
@@ -59,11 +60,45 @@
             get => myoStatus;
             set => myoStatus = value;
         }
+
+        /// <summary>
+        /// Trạng thái trước đó của booking (phục vụ tính năng Undo).
+        /// </summary>
+        public BookingStatus? PreviousStatus
+        {
+            get => myoPreviousStatus;
+            set => myoPreviousStatus = value;
+        }
+
         public decimal BookingFee => myoFlight.PricePerSeat * BookingFeePercentage;
         public override string EntityType => "Booking";
+
+        /// <summary>
+        /// Tạo bản sao sâu (deep copy) của đối tượng Booking.
+        /// </summary>
+        /// <returns>Bản sao mới của Booking.</returns>
+        public Booking Clone()
+        {
+            return new Booking(BookingId, FlightId, PassengerName, PassportNumber, SeatNumber, Status, myoFlight)
+            {
+                PreviousStatus = this.PreviousStatus
+            };
+        }
+
+        /// <summary>
+        /// Returns a string representation of the booking information.
+        /// </summary>
         public override string GetInfo()
         {
             return $"Booking ID: {BookingId}, Flight ID: {FlightId}, Passenger Name: {PassengerName}, Passport Number: {PassportNumber}, Seat Number: {SeatNumber}, Status: {Status}, Booking Fee: {BookingFee}";
+        }
+
+        /// <summary>
+        /// Returns a summary of the booking information, including passenger name and flight ID.
+        /// </summary>
+        public override string GetSummary()
+        {
+            return $"Booking for {PassengerName} on flight {FlightId}";
         }
     }
 }
