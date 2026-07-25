@@ -3,6 +3,34 @@
    Used by index.html (Course Listing + Search/Filter/Sort)
    ============================================================ */
 
+// Hardcoded user credentials
+const USERS = [
+    {
+        id: 1,
+        fullname: "Admin One",
+        username: "admin1",
+        password: "adminpass1",
+    },
+    {
+        id: 2,
+        fullname: "Student One",
+        username: "student1",
+        password: "password1",
+    },
+    {
+        id: 3,
+        fullname: "Student Two",
+        username: "student2",
+        password: "password2",
+    },
+    {
+        id: 4,
+        fullname: "Student Three",
+        username: "student3",
+        password: "password3",
+    },
+];
+
 // Hardcoded course catalogue — at least 6 courses across 3+ categories
 const COURSES = [
     {
@@ -109,6 +137,26 @@ const state = {
     activeCategory: "All",
     sortBy: "default",
 };
+
+function getLoggedInUser() {
+    const rawUser = localStorage.getItem("loggedInUser");
+
+    if (!rawUser) {
+        return null;
+    }
+
+    try {
+        const parsedUser = JSON.parse(rawUser);
+
+        return parsedUser && typeof parsedUser === "object" ? parsedUser : null;
+    } catch {
+        return null;
+    }
+}
+
+function clearLoggedInUser() {
+    localStorage.removeItem("loggedInUser");
+}
 
 // Formats a numeric price into a display string ("FREE" or "$49")
 function formatPrice(price) {
@@ -243,6 +291,46 @@ function initSort() {
     });
 }
 
+function renderAuthNav() {
+    const authNav = document.querySelector("[data-auth-nav]");
+
+    if (!authNav) {
+        return;
+    }
+
+    const user = getLoggedInUser();
+    authNav.innerHTML = "";
+
+    if (!user) {
+        const loginLink = document.createElement("a");
+        loginLink.className = "btn-custom btn-primary-custom";
+        loginLink.href = "login.html";
+        loginLink.textContent = "Login";
+        authNav.appendChild(loginLink);
+        return;
+    }
+
+    const stack = document.createElement("div");
+    stack.className = "auth-nav-stack";
+
+    const userName = document.createElement("span");
+    userName.className = "auth-user-name";
+    userName.textContent = user.fullname || user.username || "User";
+
+    const logoutButton = document.createElement("button");
+    logoutButton.type = "button";
+    logoutButton.className = "btn-custom btn-logout-custom";
+    logoutButton.textContent = "Logout";
+    logoutButton.addEventListener("click", () => {
+        clearLoggedInUser();
+        renderAuthNav();
+        window.location.href = "index.html";
+    });
+
+    stack.append(userName, logoutButton);
+    authNav.appendChild(stack);
+}
+
 function setAuthMessage(message, type = "success") {
     const alertBox = document.getElementById("authMessage");
 
@@ -283,37 +371,28 @@ function handleAuthSubmit(form) {
             return;
         }
 
-        const authMode = form.dataset.authMode;
-
-        if (authMode === "signup") {
-            const password = form.querySelector("#signupPassword");
-            const confirmPassword = form.querySelector(
-                "#signupConfirmPassword",
-            );
-
-            if (
-                password &&
-                confirmPassword &&
-                password.value !== confirmPassword.value
-            ) {
-                confirmPassword.setCustomValidity("Passwords do not match");
-                form.reportValidity();
-                confirmPassword.setCustomValidity("");
-                setAuthMessage("Passwords do not match.", "danger");
-                return;
-            }
-        }
-
-        setAuthMessage(
-            authMode === "signup"
-                ? "Account created successfully. Redirecting to login..."
-                : "Login successful. Redirecting to courses...",
+        const username = form.querySelector("#username")?.value.trim();
+        const password = form.querySelector("#loginPassword")?.value.trim();
+        const user = USERS.find(
+            (user) => user.username === username && user.password === password,
         );
-
-        window.setTimeout(() => {
-            window.location.href =
-                authMode === "signup" ? "login.html" : "index.html";
-        }, 900);
+        if (user) {
+            setAuthMessage("Login successful. Redirecting to courses...");
+            localStorage.setItem(
+                "loggedInUser",
+                JSON.stringify({
+                    id: user.id,
+                    fullname: user.fullname,
+                    username: user.username,
+                }),
+            );
+            window.setTimeout(() => {
+                window.location.href = "index.html";
+            }, 900);
+            return;
+        } else {
+            setAuthMessage("Invalid username or password.", "danger");
+        }
     });
 }
 
@@ -333,6 +412,8 @@ function initAuthPage() {
 
 // Entry point: runs once the DOM is ready
 document.addEventListener("DOMContentLoaded", () => {
+    renderAuthNav();
+
     if (document.getElementById("courseGrid")) {
         initSearch();
         initCategoryTabs();
