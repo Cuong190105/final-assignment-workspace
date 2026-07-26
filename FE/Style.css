@@ -63,6 +63,11 @@ ul {
     color: var(--primary);
 }
 
+.nav-admin {
+    color: var(--danger);
+    font-weight: 600;
+}
+
 .btn-custom {
     border: none;
     border-radius: 8px;
@@ -102,9 +107,10 @@ ul {
 }
 
 .btn-logout-custom {
+    padding: 0;
     background: transparent;
-    border: 1px solid var(--border);
-    color: var(--dark);
+    border: 1px solid var(--danger);
+    color: var(--danger);
 }
 
 .btn-logout-custom:hover {
@@ -707,6 +713,13 @@ footer {
     width: 0%;
     border-radius: 999px;
     transition: width 0.35s ease;
+}
+
+.lesson-link {
+    margin-left: auto;
+    font-size: 14px;
+    color: var(--primary);
+    font-weight: 600;
 }
 
 .quiz-panel {

@@ -10,24 +10,28 @@ const USERS = [
         fullname: "Admin One",
         username: "admin1",
         password: "adminpass1",
+        role: "admin",
     },
     {
         id: 2,
         fullname: "Student One",
         username: "student1",
         password: "password1",
+        role: "student",
     },
     {
         id: 3,
         fullname: "Student Two",
         username: "student2",
         password: "password2",
+        role: "student",
     },
     {
         id: 4,
         fullname: "Student Three",
         username: "student3",
         password: "password3",
+        role: "student",
     },
 ];
 
@@ -293,6 +297,7 @@ function initSort() {
 
 function renderAuthNav() {
     const authNav = document.querySelector("[data-auth-nav]");
+    const navBar = document.querySelector(".navbar-nav");
 
     if (!authNav) {
         return;
@@ -308,6 +313,18 @@ function renderAuthNav() {
         loginLink.textContent = "Login";
         authNav.appendChild(loginLink);
         return;
+    } else if (
+        user.role === "admin" &&
+        !window.location.pathname.includes("admin.html")
+    ) {
+        const adminLink = document.createElement("a");
+        adminLink.className = "nav-link nav-admin";
+        adminLink.href = "admin.html";
+        adminLink.textContent = "Admin Panel";
+        const adminNavItem = document.createElement("li");
+        adminNavItem.className = "nav-item";
+        adminNavItem.appendChild(adminLink);
+        navBar.appendChild(adminNavItem);
     }
 
     const stack = document.createElement("div");
@@ -377,13 +394,13 @@ function handleAuthSubmit(form) {
             (user) => user.username === username && user.password === password,
         );
         if (user) {
-            setAuthMessage("Login successful. Redirecting to courses...");
+            setAuthMessage("Login successful.");
             localStorage.setItem(
                 "loggedInUser",
                 JSON.stringify({
                     id: user.id,
                     fullname: user.fullname,
-                    username: user.username,
+                    role: user.role || "student",
                 }),
             );
             window.setTimeout(() => {

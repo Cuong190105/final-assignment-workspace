@@ -14,7 +14,7 @@ const COURSE_DETAILS = {
             "Build semantic web pages with HTML5",
             "Style responsive layouts with modern CSS",
             "Use Flexbox and Grid confidently",
-            "Create clean, accessible interfaces"
+            "Create clean, accessible interfaces",
         ],
         description1:
             "This course gives you a practical foundation in HTML and CSS. You will learn how to structure pages, style them properly, and build layouts that work across desktop, tablet, and mobile screens.",
@@ -26,7 +26,7 @@ const COURSE_DETAILS = {
                 lessons: [
                     { id: "c1-s1-l1", title: "Introduction to HTML" },
                     { id: "c1-s1-l2", title: "Text, Links, and Images" },
-                    { id: "c1-s1-l3", title: "Lists and Tables" }
+                    { id: "c1-s1-l3", title: "Lists and Tables" },
                 ],
                 quiz: [
                     {
@@ -34,21 +34,21 @@ const COURSE_DETAILS = {
                         options: [
                             "HyperText Markup Language",
                             "HighText Machine Language",
-                            "Hyperlink Text Markup Language"
+                            "Hyperlink Text Markup Language",
                         ],
-                        answer: 0
+                        answer: 0,
                     },
                     {
                         question: "Which tag defines a paragraph?",
                         options: ["<para>", "<p>", "<pg>"],
-                        answer: 1
+                        answer: 1,
                     },
                     {
                         question: "Which tag is used for the largest heading?",
                         options: ["<h6>", "<heading>", "<h1>"],
-                        answer: 2
-                    }
-                ]
+                        answer: 2,
+                    },
+                ],
             },
             {
                 title: "Section 2 — CSS Basics",
@@ -56,27 +56,31 @@ const COURSE_DETAILS = {
                     { id: "c1-s2-l1", title: "Selectors and Properties" },
                     { id: "c1-s2-l2", title: "Box Model" },
                     { id: "c1-s2-l3", title: "Colors and Typography" },
-                    { id: "c1-s2-l4", title: "Layouts with Flexbox" }
+                    { id: "c1-s2-l4", title: "Layouts with Flexbox" },
                 ],
                 quiz: [
                     {
                         question: "Which property changes text color?",
                         options: ["font-style", "color", "text-align"],
-                        answer: 1
+                        answer: 1,
                     },
                     {
                         question: "Which is part of the CSS box model?",
                         options: ["Margin", "Route", "Header"],
-                        answer: 0
+                        answer: 0,
                     },
                     {
                         question: "Flexbox is mainly used for...",
-                        options: ["2D layout alignment", "Database storage", "Image compression"],
-                        answer: 0
-                    }
-                ]
-            }
-        ]
+                        options: [
+                            "2D layout alignment",
+                            "Database storage",
+                            "Image compression",
+                        ],
+                        answer: 0,
+                    },
+                ],
+            },
+        ],
     },
     2: {
         students: 980,
@@ -86,7 +90,7 @@ const COURSE_DETAILS = {
             "Use modern JavaScript syntax",
             "Work with arrays and objects",
             "Handle events with addEventListener",
-            "Build interactive UI components"
+            "Build interactive UI components",
         ],
         description1:
             "This course covers essential JavaScript concepts for building interactive web pages. You will practice DOM manipulation, event handling, and data-driven rendering.",
@@ -98,25 +102,31 @@ const COURSE_DETAILS = {
                 lessons: [
                     { id: "c2-s1-l1", title: "Variables and Data Types" },
                     { id: "c2-s1-l2", title: "Functions and Scope" },
-                    { id: "c2-s1-l3", title: "Arrays and Loops" }
+                    { id: "c2-s1-l3", title: "Arrays and Loops" },
                 ],
                 quiz: [
                     {
-                        question: "Which keyword declares a block-scoped variable?",
+                        question:
+                            "Which keyword declares a block-scoped variable?",
                         options: ["var", "let", "int"],
-                        answer: 1
+                        answer: 1,
                     },
                     {
                         question: "What does DOM stand for?",
-                        options: ["Document Object Model", "Data Object Map", "Digital Output Method"],
-                        answer: 0
+                        options: [
+                            "Document Object Model",
+                            "Data Object Map",
+                            "Digital Output Method",
+                        ],
+                        answer: 0,
                     },
                     {
-                        question: "Which method adds a new item to the end of an array?",
+                        question:
+                            "Which method adds a new item to the end of an array?",
                         options: ["push()", "pop()", "shift()"],
-                        answer: 0
-                    }
-                ]
+                        answer: 0,
+                    },
+                ],
             },
             {
                 title: "Section 2 — Interactive Pages",
@@ -124,27 +134,36 @@ const COURSE_DETAILS = {
                     { id: "c2-s2-l1", title: "Event Handling" },
                     { id: "c2-s2-l2", title: "DOM Updates" },
                     { id: "c2-s2-l3", title: "Form Validation" },
-                    { id: "c2-s2-l4", title: "Local Storage" }
+                    { id: "c2-s2-l4", title: "Local Storage" },
                 ],
                 quiz: [
                     {
-                        question: "Which event is triggered when typing in an input field?",
+                        question:
+                            "Which event is triggered when typing in an input field?",
                         options: ["click", "input", "submit"],
-                        answer: 1
+                        answer: 1,
                     },
                     {
                         question: "Which API stores data in the browser?",
-                        options: ["localStorage", "sessionPrint", "browserCache"],
-                        answer: 0
+                        options: [
+                            "localStorage",
+                            "sessionPrint",
+                            "browserCache",
+                        ],
+                        answer: 0,
                     },
                     {
                         question: "Which method attaches an event listener?",
-                        options: ["addEventListener()", "attachEvent()", "bindClick()"],
-                        answer: 0
-                    }
-                ]
-            }
-        ]
+                        options: [
+                            "addEventListener()",
+                            "attachEvent()",
+                            "bindClick()",
+                        ],
+                        answer: 0,
+                    },
+                ],
+            },
+        ],
     },
     3: {
         students: 450,
@@ -154,7 +173,7 @@ const COURSE_DETAILS = {
             "Understand UI/UX principles",
             "Create user-friendly layouts",
             "Apply visual hierarchy correctly",
-            "Design consistent interfaces"
+            "Design consistent interfaces",
         ],
         description1:
             "This course introduces the basics of UI/UX design with a focus on clarity, spacing, and usability.",
@@ -166,27 +185,39 @@ const COURSE_DETAILS = {
                 lessons: [
                     { id: "c3-s1-l1", title: "UI vs UX" },
                     { id: "c3-s1-l2", title: "Typography Basics" },
-                    { id: "c3-s1-l3", title: "Color Theory" }
+                    { id: "c3-s1-l3", title: "Color Theory" },
                 ],
                 quiz: [
                     {
                         question: "UI stands for...",
-                        options: ["User Interface", "Unified Input", "Unique Idea"],
-                        answer: 0
+                        options: [
+                            "User Interface",
+                            "Unified Input",
+                            "Unique Idea",
+                        ],
+                        answer: 0,
                     },
                     {
                         question: "A good layout should be...",
-                        options: ["Confusing", "Clear and consistent", "Random"],
-                        answer: 1
+                        options: [
+                            "Confusing",
+                            "Clear and consistent",
+                            "Random",
+                        ],
+                        answer: 1,
                     },
                     {
                         question: "Visual hierarchy helps users...",
-                        options: ["Find important content", "Delete elements", "Change file names"],
-                        answer: 0
-                    }
-                ]
-            }
-        ]
+                        options: [
+                            "Find important content",
+                            "Delete elements",
+                            "Change file names",
+                        ],
+                        answer: 0,
+                    },
+                ],
+            },
+        ],
     },
     4: {
         students: 520,
@@ -196,7 +227,7 @@ const COURSE_DETAILS = {
             "Design interfaces in Figma",
             "Build reusable components",
             "Work with layers and frames",
-            "Export assets efficiently"
+            "Export assets efficiently",
         ],
         description1:
             "Learn the essentials of Figma and build practical design skills for real projects.",
@@ -208,27 +239,39 @@ const COURSE_DETAILS = {
                 lessons: [
                     { id: "c4-s1-l1", title: "Getting Started with Figma" },
                     { id: "c4-s1-l2", title: "Frames and Shapes" },
-                    { id: "c4-s1-l3", title: "Auto Layout Basics" }
+                    { id: "c4-s1-l3", title: "Auto Layout Basics" },
                 ],
                 quiz: [
                     {
                         question: "Figma is mainly used for...",
-                        options: ["Designing interfaces", "Running databases", "Writing server code"],
-                        answer: 0
+                        options: [
+                            "Designing interfaces",
+                            "Running databases",
+                            "Writing server code",
+                        ],
+                        answer: 0,
                     },
                     {
                         question: "Auto layout helps with...",
-                        options: ["Responsive spacing", "Audio editing", "File compression"],
-                        answer: 0
+                        options: [
+                            "Responsive spacing",
+                            "Audio editing",
+                            "File compression",
+                        ],
+                        answer: 0,
                     },
                     {
                         question: "Frames are used to...",
-                        options: ["Organize designs", "Host websites", "Store passwords"],
-                        answer: 0
-                    }
-                ]
-            }
-        ]
+                        options: [
+                            "Organize designs",
+                            "Host websites",
+                            "Store passwords",
+                        ],
+                        answer: 0,
+                    },
+                ],
+            },
+        ],
     },
     5: {
         students: 1500,
@@ -238,7 +281,7 @@ const COURSE_DETAILS = {
             "Analyze data with Python",
             "Use Pandas for cleaning data",
             "Create charts and plots",
-            "Work with datasets confidently"
+            "Work with datasets confidently",
         ],
         description1:
             "This course builds your data science foundation using Python and common data tools.",
@@ -250,27 +293,31 @@ const COURSE_DETAILS = {
                 lessons: [
                     { id: "c5-s1-l1", title: "Python Refresher" },
                     { id: "c5-s1-l2", title: "NumPy Basics" },
-                    { id: "c5-s1-l3", title: "Pandas Introduction" }
+                    { id: "c5-s1-l3", title: "Pandas Introduction" },
                 ],
                 quiz: [
                     {
                         question: "Pandas is used for...",
-                        options: ["Data analysis", "Web hosting", "Game rendering"],
-                        answer: 0
+                        options: [
+                            "Data analysis",
+                            "Web hosting",
+                            "Game rendering",
+                        ],
+                        answer: 0,
                     },
                     {
                         question: "Which library is common for plotting?",
                         options: ["Matplotlib", "Bootstrap", "Express"],
-                        answer: 0
+                        answer: 0,
                     },
                     {
                         question: "A dataset is a collection of...",
                         options: ["Data records", "Passwords", "Icons"],
-                        answer: 0
-                    }
-                ]
-            }
-        ]
+                        answer: 0,
+                    },
+                ],
+            },
+        ],
     },
     6: {
         students: 870,
@@ -280,7 +327,7 @@ const COURSE_DETAILS = {
             "Create useful dashboards",
             "Choose the right chart type",
             "Present data clearly",
-            "Explain trends with visuals"
+            "Explain trends with visuals",
         ],
         description1:
             "This course helps you turn raw data into clear charts and dashboards.",
@@ -292,27 +339,35 @@ const COURSE_DETAILS = {
                 lessons: [
                     { id: "c6-s1-l1", title: "Choosing Chart Types" },
                     { id: "c6-s1-l2", title: "Bar and Line Charts" },
-                    { id: "c6-s1-l3", title: "Dashboard Layouts" }
+                    { id: "c6-s1-l3", title: "Dashboard Layouts" },
                 ],
                 quiz: [
                     {
                         question: "Bar charts are good for...",
-                        options: ["Comparing values", "Editing photos", "Writing code"],
-                        answer: 0
+                        options: [
+                            "Comparing values",
+                            "Editing photos",
+                            "Writing code",
+                        ],
+                        answer: 0,
                     },
                     {
                         question: "Line charts often show...",
-                        options: ["Trends over time", "Menu items", "Login forms"],
-                        answer: 0
+                        options: [
+                            "Trends over time",
+                            "Menu items",
+                            "Login forms",
+                        ],
+                        answer: 0,
                     },
                     {
                         question: "Good data visualization should be...",
                         options: ["Clear", "Overloaded", "Hidden"],
-                        answer: 0
-                    }
-                ]
-            }
-        ]
+                        answer: 0,
+                    },
+                ],
+            },
+        ],
     },
     7: {
         students: 300,
@@ -322,7 +377,7 @@ const COURSE_DETAILS = {
             "Understand digital marketing basics",
             "Plan campaigns clearly",
             "Use content strategy effectively",
-            "Measure simple performance metrics"
+            "Measure simple performance metrics",
         ],
         description1:
             "This course introduces essential digital marketing concepts for beginners.",
@@ -334,27 +389,39 @@ const COURSE_DETAILS = {
                 lessons: [
                     { id: "c7-s1-l1", title: "Introduction to Marketing" },
                     { id: "c7-s1-l2", title: "Content Strategy" },
-                    { id: "c7-s1-l3", title: "Campaign Planning" }
+                    { id: "c7-s1-l3", title: "Campaign Planning" },
                 ],
                 quiz: [
                     {
                         question: "Marketing is about...",
-                        options: ["Promoting value", "Cleaning files", "Fixing monitors"],
-                        answer: 0
+                        options: [
+                            "Promoting value",
+                            "Cleaning files",
+                            "Fixing monitors",
+                        ],
+                        answer: 0,
                     },
                     {
                         question: "Content strategy focuses on...",
-                        options: ["Planning content", "Buying keyboards", "Changing passwords"],
-                        answer: 0
+                        options: [
+                            "Planning content",
+                            "Buying keyboards",
+                            "Changing passwords",
+                        ],
+                        answer: 0,
                     },
                     {
                         question: "A campaign should have...",
-                        options: ["Clear goals", "No audience", "Random timing"],
-                        answer: 0
-                    }
-                ]
-            }
-        ]
+                        options: [
+                            "Clear goals",
+                            "No audience",
+                            "Random timing",
+                        ],
+                        answer: 0,
+                    },
+                ],
+            },
+        ],
     },
     8: {
         students: 610,
@@ -364,7 +431,7 @@ const COURSE_DETAILS = {
             "Improve search visibility",
             "Create useful content",
             "Understand keyword basics",
-            "Track simple SEO results"
+            "Track simple SEO results",
         ],
         description1:
             "Learn the basics of SEO and how content strategy supports better visibility.",
@@ -376,28 +443,36 @@ const COURSE_DETAILS = {
                 lessons: [
                     { id: "c8-s1-l1", title: "How Search Works" },
                     { id: "c8-s1-l2", title: "Keywords and Content" },
-                    { id: "c8-s1-l3", title: "Measuring SEO" }
+                    { id: "c8-s1-l3", title: "Measuring SEO" },
                 ],
                 quiz: [
                     {
                         question: "SEO helps improve...",
-                        options: ["Search visibility", "Monitor brightness", "File size"],
-                        answer: 0
+                        options: [
+                            "Search visibility",
+                            "Monitor brightness",
+                            "File size",
+                        ],
+                        answer: 0,
                     },
                     {
                         question: "Keywords help search engines...",
-                        options: ["Understand content", "Delete pages", "Format tables"],
-                        answer: 0
+                        options: [
+                            "Understand content",
+                            "Delete pages",
+                            "Format tables",
+                        ],
+                        answer: 0,
                     },
                     {
                         question: "SEO results are often measured with...",
                         options: ["Analytics", "Paint", "USB"],
-                        answer: 0
-                    }
-                ]
-            }
-        ]
-    }
+                        answer: 0,
+                    },
+                ],
+            },
+        ],
+    },
 };
 
 // Page state
@@ -407,7 +482,7 @@ const detailState = {
     detail: null,
     completedLessons: [],
     sectionPassMap: {},
-    activeQuizSectionIndex: null
+    activeQuizSectionIndex: null,
 };
 
 // Builds the query string parser
@@ -495,7 +570,9 @@ function toggleLessonCompletion(lessonId, checked) {
             detailState.completedLessons.push(lessonId);
         }
     } else {
-        detailState.completedLessons = detailState.completedLessons.filter((id) => id !== lessonId);
+        detailState.completedLessons = detailState.completedLessons.filter(
+            (id) => id !== lessonId,
+        );
     }
 
     saveCompletedLessons(detailState.courseId, detailState.completedLessons);
@@ -507,7 +584,9 @@ function toggleLessonCompletion(lessonId, checked) {
 function getProgressStats() {
     const allLessons = getAllLessons(detailState.detail);
     const total = allLessons.length;
-    const completed = allLessons.filter((lesson) => isLessonCompleted(lesson.id)).length;
+    const completed = allLessons.filter((lesson) =>
+        isLessonCompleted(lesson.id),
+    ).length;
     const percent = total === 0 ? 0 : Math.round((completed / total) * 100);
 
     return { total, completed, percent };
@@ -534,7 +613,9 @@ function updateProgressUI() {
 // Updates section badges when all lessons are completed
 function updateSectionBadges() {
     detailState.detail.sections.forEach((section, sectionIndex) => {
-        const allDone = section.lessons.every((lesson) => isLessonCompleted(lesson.id));
+        const allDone = section.lessons.every((lesson) =>
+            isLessonCompleted(lesson.id),
+        );
         const badge = document.getElementById(`sectionBadge-${sectionIndex}`);
 
         if (badge) {
@@ -565,12 +646,13 @@ function renderCourseInfo() {
         "bi-bar-chart-line": "bi-bar-chart-line",
         "bi-graph-up": "bi-graph-up",
         "bi-megaphone": "bi-megaphone",
-        "bi-search": "bi-search"
+        "bi-search": "bi-search",
     };
 
-    const bannerIcon = detailState.course.icon && iconMap[detailState.course.icon]
-        ? detailState.course.icon
-        : "bi-mortarboard-fill";
+    const bannerIcon =
+        detailState.course.icon && iconMap[detailState.course.icon]
+            ? detailState.course.icon
+            : "bi-mortarboard-fill";
 
     if (courseBanner) {
         courseBanner.className = `course-detail-banner rounded-custom shadow-custom mb-4 ${detailState.detail.bannerClass}`;
@@ -591,22 +673,30 @@ function renderCourseInfo() {
     }
 
     if (courseTitle) courseTitle.textContent = detailState.course.title;
-    if (courseRating) courseRating.textContent = `${detailState.course.rating.toFixed(1)} (${detailState.course.reviews} reviews)`;
-    if (courseStudents) courseStudents.textContent = `${detailState.detail.students} students`;
-    if (courseInstructor) courseInstructor.textContent = `By: ${detailState.course.instructor}`;
-    if (coursePrice) coursePrice.textContent = formatPrice(detailState.course.price);
+    if (courseRating)
+        courseRating.textContent = `${detailState.course.rating.toFixed(1)} (${detailState.course.reviews} reviews)`;
+    if (courseStudents)
+        courseStudents.textContent = `${detailState.detail.students} students`;
+    if (courseInstructor)
+        courseInstructor.textContent = `By: ${detailState.course.instructor}`;
+    if (coursePrice)
+        coursePrice.textContent = formatPrice(detailState.course.price);
     if (lessonCount) lessonCount.textContent = `${detailState.course.lessons}`;
-    if (description1) description1.textContent = detailState.detail.description1;
-    if (description2) description2.textContent = detailState.detail.description2;
+    if (description1)
+        description1.textContent = detailState.detail.description1;
+    if (description2)
+        description2.textContent = detailState.detail.description2;
 
     if (learnList) {
         learnList.innerHTML = detailState.detail.learn
-            .map((item) => `
+            .map(
+                (item) => `
                 <li class="learn-item">
                     <i class="bi bi-check-circle-fill text-success me-2"></i>
                     <span>${item}</span>
                 </li>
-            `)
+            `,
+            )
             .join("");
     }
 }
@@ -689,11 +779,16 @@ function renderCurriculum() {
                                     data-lesson-id="${lesson.id}"
                                     ${isLessonCompleted(lesson.id) ? "checked" : ""}>
                             </div>
-                            <div class="flex-grow-1">
-                                <label class="lesson-label fw-medium" for="${checkboxId}">
-                                    ${lessonIndex + 1}. ${lesson.title}
-                                </label>
-                            </div>
+                            <a href="lesson.html?id=${lesson.id}" class="text-decoration-none d-flex align-items-center flex-grow-1">
+                                <div class="flex-grow-1">
+                                    <label class="lesson-label fw-medium">
+                                        ${lessonIndex + 1}. ${lesson.title}
+                                    </label>
+                                </div>
+                                <span class="lesson-link">
+                                    View Lesson
+                                </span>
+                            </a>
                         </div>
                     `;
                 })
@@ -800,13 +895,18 @@ function resetQuizUI(sectionIndex) {
 
 // Opens the next accordion section
 function openNextSection(sectionIndex) {
-    const nextSectionButton = document.querySelector(`#heading-${sectionIndex + 1} .accordion-button`);
+    const nextSectionButton = document.querySelector(
+        `#heading-${sectionIndex + 1} .accordion-button`,
+    );
     if (nextSectionButton) {
         const bsCollapse = bootstrap.Collapse.getOrCreateInstance(
-            document.getElementById(`collapse-${sectionIndex + 1}`)
+            document.getElementById(`collapse-${sectionIndex + 1}`),
         );
         bsCollapse.show();
-        nextSectionButton.scrollIntoView({ behavior: "smooth", block: "start" });
+        nextSectionButton.scrollIntoView({
+            behavior: "smooth",
+            block: "start",
+        });
     }
 }
 
@@ -841,10 +941,10 @@ function showQuizResult(sectionIndex, score, total) {
 function markQuizAnswers(sectionIndex, section) {
     section.quiz.forEach((question, questionIndex) => {
         const selected = document.querySelector(
-            `input[name="quiz-${sectionIndex}-${questionIndex}"]:checked`
+            `input[name="quiz-${sectionIndex}-${questionIndex}"]:checked`,
         );
         const questionBlock = document.querySelector(
-            `#quizForm-${sectionIndex} .quiz-question[data-question-index="${questionIndex}"]`
+            `#quizForm-${sectionIndex} .quiz-question[data-question-index="${questionIndex}"]`,
         );
         const feedback = questionBlock?.querySelector(".quiz-feedback");
 
@@ -878,7 +978,7 @@ function submitQuiz(sectionIndex) {
 
     section.quiz.forEach((question, questionIndex) => {
         const selected = document.querySelector(
-            `input[name="quiz-${sectionIndex}-${questionIndex}"]:checked`
+            `input[name="quiz-${sectionIndex}-${questionIndex}"]:checked`,
         );
         if (selected && Number(selected.value) === question.answer) {
             score += 1;
@@ -905,7 +1005,9 @@ function bindQuizEvents() {
     detailState.detail.sections.forEach((section, sectionIndex) => {
         const form = document.getElementById(`quizForm-${sectionIndex}`);
         const retakeBtn = document.getElementById(`retakeQuiz-${sectionIndex}`);
-        const continueBtn = document.getElementById(`continueQuiz-${sectionIndex}`);
+        const continueBtn = document.getElementById(
+            `continueQuiz-${sectionIndex}`,
+        );
 
         if (form) {
             form.addEventListener("submit", (event) => {
@@ -936,9 +1038,15 @@ function bindQuizEvents() {
 function restoreQuizState() {
     detailState.detail.sections.forEach((section, sectionIndex) => {
         if (detailState.sectionPassMap[sectionIndex]) {
-            const result = document.getElementById(`quizResult-${sectionIndex}`);
-            const retakeBtn = document.getElementById(`retakeQuiz-${sectionIndex}`);
-            const continueBtn = document.getElementById(`continueQuiz-${sectionIndex}`);
+            const result = document.getElementById(
+                `quizResult-${sectionIndex}`,
+            );
+            const retakeBtn = document.getElementById(
+                `retakeQuiz-${sectionIndex}`,
+            );
+            const continueBtn = document.getElementById(
+                `continueQuiz-${sectionIndex}`,
+            );
 
             if (result) {
                 result.classList.remove("d-none");

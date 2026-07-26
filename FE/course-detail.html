@@ -1,238 +1,255 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Course Detail | LearnHub</title>
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Course Detail | LearnHub</title>
 
-    <!-- Bootstrap 5 CSS -->
-    <link
-        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
-        rel="stylesheet"
-    />
+        <!-- Bootstrap 5 CSS -->
+        <link
+            href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+            rel="stylesheet"
+        />
 
-    <!-- Bootstrap Icons -->
-    <link
-        rel="stylesheet"
-        href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css"
-    />
+        <!-- Bootstrap Icons -->
+        <link
+            rel="stylesheet"
+            href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css"
+        />
 
-    <!-- Shared custom styles -->
-    <link rel="stylesheet" href="style.css" />
-</head>
-<body>
+        <!-- Shared custom styles -->
+        <link rel="stylesheet" href="style.css" />
+    </head>
+    <body>
+        <!-- ===================== NAVBAR ===================== -->
+        <nav class="navbar navbar-expand-lg sticky-top">
+            <div class="container">
+                <a class="navbar-brand fs-4" href="index.html">
+                    <i class="bi bi-mortarboard-fill"></i> LearnHub
+                </a>
 
-    <!-- ===================== NAVBAR ===================== -->
-    <nav class="navbar navbar-expand-lg sticky-top">
-        <div class="container">
-            <a class="navbar-brand fs-4" href="index.html">
-                <i class="bi bi-mortarboard-fill"></i> LearnHub
-            </a>
+                <button
+                    class="navbar-toggler"
+                    type="button"
+                    data-bs-toggle="collapse"
+                    data-bs-target="#navMenu"
+                    aria-controls="navMenu"
+                    aria-expanded="false"
+                    aria-label="Toggle navigation"
+                >
+                    <span class="navbar-toggler-icon"></span>
+                </button>
 
-            <button
-                class="navbar-toggler"
-                type="button"
-                data-bs-toggle="collapse"
-                data-bs-target="#navMenu"
-                aria-controls="navMenu"
-                aria-expanded="false"
-                aria-label="Toggle navigation"
-            >
-                <span class="navbar-toggler-icon"></span>
-            </button>
-
-            <div class="collapse navbar-collapse" id="navMenu">
-                <ul class="navbar-nav mx-auto mb-3 mb-lg-0 gap-lg-2">
-                    <li class="nav-item">
-                        <a class="nav-link active" href="index.html">Courses</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#about">About</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#contact">Contact</a>
-                    </li>
-                </ul>
-
-                <div class="d-flex align-items-center gap-3">
-                    <button class="btn-custom btn-primary-custom">Login</button>
-                </div>
-            </div>
-        </div>
-    </nav>
-
-    <!-- ===================== MAIN CONTENT ===================== -->
-    <main class="container section-padding">
-        <div class="row g-4">
-            <!-- LEFT COLUMN -->
-            <div class="col-lg-8">
-                <!-- Banner -->
-                <div
-                    id="courseBanner"
-                    class="course-detail-banner rounded-custom shadow-custom mb-4"
-                ></div>
-
-                <!-- Title -->
-                <h1 id="courseTitle" class="fw-bold mb-3"></h1>
-
-                <!-- Meta -->
-                <div class="d-flex flex-wrap gap-4 mb-4">
-                    <span>
-                        <i class="bi bi-star-fill text-warning"></i>
-                        <span id="courseRating"></span>
-                    </span>
-
-                    <span>
-                        <i class="bi bi-people-fill"></i>
-                        <span id="courseStudents"></span>
-                    </span>
-
-                    <span>
-                        <i class="bi bi-person-fill"></i>
-                        <span id="courseInstructor"></span>
-                    </span>
-                </div>
-
-                <!-- What You'll Learn -->
-                <div class="card shadow-custom border-0 mb-4">
-                    <div class="card-body">
-                        <h3 class="mb-3">What You'll Learn</h3>
-                        <ul id="learnList" class="learn-list"></ul>
-                    </div>
-                </div>
-
-                <!-- Description -->
-                <div class="card shadow-custom border-0 mb-4">
-                    <div class="card-body">
-                        <h3 class="mb-3">Course Description</h3>
-                        <p id="description1" class="mb-3"></p>
-                        <p id="description2" class="mb-0"></p>
-                    </div>
-                </div>
-
-                <!-- Progress -->
-                <div class="card shadow-custom border-0 mb-4">
-                    <div class="card-body">
-                        <div class="d-flex justify-content-between align-items-center mb-2 flex-wrap gap-2">
-                            <h4 class="mb-0">Course Progress</h4>
-                            <span id="progressText">0 / 0 lessons completed</span>
-                        </div>
-
-                        <div class="progress progress-thin">
-                            <div
-                                id="progressBar"
-                                class="progress-bar progress-fill bg-success"
-                                role="progressbar"
-                                aria-valuemin="0"
-                                aria-valuemax="100"
-                                aria-valuenow="0"
-                            ></div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Curriculum -->
-                <div class="card shadow-custom border-0 mb-5">
-                    <div class="card-body">
-                        <h3 class="mb-4">Curriculum</h3>
-
-                        <div class="accordion" id="curriculumAccordion">
-                            <!-- detail.js will render sections here -->
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- RIGHT COLUMN -->
-            <div class="col-lg-4">
-                <aside class="course-sidebar shadow-custom rounded-custom">
-                    <div
-                        id="sidebarThumbnail"
-                        class="course-thumbnail mb-3"
-                    ></div>
-
-                    <h2
-                        id="coursePrice"
-                        class="text-primary-custom fw-bold text-center my-4"
-                    ></h2>
-
-                    <button
-                        id="enrollBtn"
-                        class="btn-custom btn-primary-custom w-100 mb-4"
-                    >
-                        Enroll Now
-                    </button>
-
-                    <ul class="list-group list-group-flush">
-                        <li class="list-group-item">
-                            <i class="bi bi-play-circle-fill me-2"></i>
-                            <span id="lessonCount"></span> Video Lessons
+                <div class="collapse navbar-collapse" id="navMenu">
+                    <ul class="navbar-nav mx-auto mb-3 mb-lg-0 gap-lg-2">
+                        <li class="nav-item">
+                            <a class="nav-link active" href="index.html"
+                                >Courses</a
+                            >
                         </li>
-                        <li class="list-group-item">
-                            <i class="bi bi-infinity me-2"></i>
-                            Lifetime Access
+                        <li class="nav-item">
+                            <a class="nav-link" href="#about">About</a>
                         </li>
-                        <li class="list-group-item">
-                            <i class="bi bi-award-fill me-2"></i>
-                            Certificate
-                        </li>
-                        <li class="list-group-item">
-                            <i class="bi bi-phone-fill me-2"></i>
-                            Mobile Friendly
+                        <li class="nav-item">
+                            <a class="nav-link" href="#contact">Contact</a>
                         </li>
                     </ul>
-                </aside>
-            </div>
-        </div>
-    </main>
 
-    <!-- ===================== FOOTER ===================== -->
-    <footer id="contact">
-        <div class="container">
-            <div class="row g-4">
-                <div class="col-lg-4 col-md-6">
-                    <div class="footer-title fs-5">
-                        <i class="bi bi-mortarboard-fill"></i> LearnHub
+                    <div class="d-flex align-items-center gap-3">
+                        <div class="auth-nav-slot" data-auth-nav>
+                            <a
+                                class="btn-custom btn-primary-custom"
+                                href="login.html"
+                                >Login</a
+                            >
+                        </div>
                     </div>
-                    <p class="text-white-50">
-                        LearnHub helps you learn practical, job-ready skills with expert-led, self-paced courses in web development, design, data science, and marketing.
-                    </p>
-                </div>
-
-                <div class="col-lg-4 col-md-6">
-                    <div class="footer-title fs-5">Quick Links</div>
-                    <a href="index.html" class="footer-link">Courses</a>
-                    <a href="#about" class="footer-link">About</a>
-                    <a href="#contact" class="footer-link">Contact</a>
-                </div>
-
-                <div class="col-lg-4 col-md-6">
-                    <div class="footer-title fs-5">Contact</div>
-                    <a href="mailto:support@learnhub.com" class="footer-link">
-                        <i class="bi bi-envelope-fill"></i> support@learnhub.com
-                    </a>
-                    <a href="tel:+84123456789" class="footer-link">
-                        <i class="bi bi-telephone-fill"></i> +84 123 456 789
-                    </a>
-                    <a href="#" class="footer-link">
-                        <i class="bi bi-geo-alt-fill"></i> Hanoi, Vietnam
-                    </a>
                 </div>
             </div>
+        </nav>
 
-            <div class="footer-bottom">
-                &copy; 2026 LearnHub. All rights reserved.
+        <!-- ===================== MAIN CONTENT ===================== -->
+        <main class="container section-padding">
+            <div class="row g-4">
+                <!-- LEFT COLUMN -->
+                <div class="col-lg-8">
+                    <!-- Banner -->
+                    <div
+                        id="courseBanner"
+                        class="course-detail-banner rounded-custom shadow-custom mb-4"
+                    ></div>
+
+                    <!-- Title -->
+                    <h1 id="courseTitle" class="fw-bold mb-3"></h1>
+
+                    <!-- Meta -->
+                    <div class="d-flex flex-wrap gap-4 mb-4">
+                        <span>
+                            <i class="bi bi-star-fill text-warning"></i>
+                            <span id="courseRating"></span>
+                        </span>
+
+                        <span>
+                            <i class="bi bi-people-fill"></i>
+                            <span id="courseStudents"></span>
+                        </span>
+
+                        <span>
+                            <i class="bi bi-person-fill"></i>
+                            <span id="courseInstructor"></span>
+                        </span>
+                    </div>
+
+                    <!-- What You'll Learn -->
+                    <div class="card shadow-custom border-0 mb-4">
+                        <div class="card-body">
+                            <h3 class="mb-3">What You'll Learn</h3>
+                            <ul id="learnList" class="learn-list"></ul>
+                        </div>
+                    </div>
+
+                    <!-- Description -->
+                    <div class="card shadow-custom border-0 mb-4">
+                        <div class="card-body">
+                            <h3 class="mb-3">Course Description</h3>
+                            <p id="description1" class="mb-3"></p>
+                            <p id="description2" class="mb-0"></p>
+                        </div>
+                    </div>
+
+                    <!-- Progress -->
+                    <div class="card shadow-custom border-0 mb-4">
+                        <div class="card-body">
+                            <div
+                                class="d-flex justify-content-between align-items-center mb-2 flex-wrap gap-2"
+                            >
+                                <h4 class="mb-0">Course Progress</h4>
+                                <span id="progressText"
+                                    >0 / 0 lessons completed</span
+                                >
+                            </div>
+
+                            <div class="progress progress-thin">
+                                <div
+                                    id="progressBar"
+                                    class="progress-bar progress-fill bg-success"
+                                    role="progressbar"
+                                    aria-valuemin="0"
+                                    aria-valuemax="100"
+                                    aria-valuenow="0"
+                                ></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Curriculum -->
+                    <div class="card shadow-custom border-0 mb-5">
+                        <div class="card-body">
+                            <h3 class="mb-4">Curriculum</h3>
+
+                            <div class="accordion" id="curriculumAccordion">
+                                <!-- detail.js will render sections here -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- RIGHT COLUMN -->
+                <div class="col-lg-4">
+                    <aside class="course-sidebar shadow-custom rounded-custom">
+                        <div
+                            id="sidebarThumbnail"
+                            class="course-thumbnail mb-3"
+                        ></div>
+
+                        <h2
+                            id="coursePrice"
+                            class="text-primary-custom fw-bold text-center my-4"
+                        ></h2>
+
+                        <button
+                            id="enrollBtn"
+                            class="btn-custom btn-primary-custom w-100 mb-4"
+                        >
+                            Enroll Now
+                        </button>
+
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item">
+                                <i class="bi bi-play-circle-fill me-2"></i>
+                                <span id="lessonCount"></span> Video Lessons
+                            </li>
+                            <li class="list-group-item">
+                                <i class="bi bi-infinity me-2"></i>
+                                Lifetime Access
+                            </li>
+                            <li class="list-group-item">
+                                <i class="bi bi-award-fill me-2"></i>
+                                Certificate
+                            </li>
+                            <li class="list-group-item">
+                                <i class="bi bi-phone-fill me-2"></i>
+                                Mobile Friendly
+                            </li>
+                        </ul>
+                    </aside>
+                </div>
             </div>
-        </div>
-    </footer>
+        </main>
 
-    <!-- Bootstrap JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+        <!-- ===================== FOOTER ===================== -->
+        <footer id="contact">
+            <div class="container">
+                <div class="row g-4">
+                    <div class="col-lg-4 col-md-6">
+                        <div class="footer-title fs-5">
+                            <i class="bi bi-mortarboard-fill"></i> LearnHub
+                        </div>
+                        <p class="text-white-50">
+                            LearnHub helps you learn practical, job-ready skills
+                            with expert-led, self-paced courses in web
+                            development, design, data science, and marketing.
+                        </p>
+                    </div>
 
-    <!-- Shared data -->
-    <script src="app.js"></script>
+                    <div class="col-lg-4 col-md-6">
+                        <div class="footer-title fs-5">Quick Links</div>
+                        <a href="index.html" class="footer-link">Courses</a>
+                        <a href="#about" class="footer-link">About</a>
+                        <a href="#contact" class="footer-link">Contact</a>
+                    </div>
 
-    <!-- Detail logic -->
-    <script src="detail.js"></script>
-</body>
+                    <div class="col-lg-4 col-md-6">
+                        <div class="footer-title fs-5">Contact</div>
+                        <a
+                            href="mailto:support@learnhub.com"
+                            class="footer-link"
+                        >
+                            <i class="bi bi-envelope-fill"></i>
+                            support@learnhub.com
+                        </a>
+                        <a href="tel:+84123456789" class="footer-link">
+                            <i class="bi bi-telephone-fill"></i> +84 123 456 789
+                        </a>
+                        <a href="#" class="footer-link">
+                            <i class="bi bi-geo-alt-fill"></i> Hanoi, Vietnam
+                        </a>
+                    </div>
+                </div>
+
+                <div class="footer-bottom">
+                    &copy; 2026 LearnHub. All rights reserved.
+                </div>
+            </div>
+        </footer>
+
+        <!-- Bootstrap JS -->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+        <!-- Shared data -->
+        <script src="app.js"></script>
+
+        <!-- Detail logic -->
+        <script src="detail.js"></script>
+    </body>
 </html>
