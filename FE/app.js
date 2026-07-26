@@ -15,7 +15,7 @@ const COURSES = [
         lessons: 12,
         price: 0,
         thumbClass: "thumb-web-dev",
-        icon: "bi-code-slash"
+        icon: "bi-code-slash",
     },
     {
         id: 2,
@@ -27,7 +27,7 @@ const COURSES = [
         lessons: 20,
         price: 89,
         thumbClass: "thumb-web-dev",
-        icon: "bi-braces"
+        icon: "bi-braces",
     },
     {
         id: 3,
@@ -39,7 +39,7 @@ const COURSES = [
         lessons: 8,
         price: 49,
         thumbClass: "thumb-design",
-        icon: "bi-palette"
+        icon: "bi-palette",
     },
     {
         id: 4,
@@ -51,7 +51,7 @@ const COURSES = [
         lessons: 10,
         price: 39,
         thumbClass: "thumb-design",
-        icon: "bi-vector-pen"
+        icon: "bi-vector-pen",
     },
     {
         id: 5,
@@ -63,7 +63,7 @@ const COURSES = [
         lessons: 24,
         price: 99,
         thumbClass: "thumb-data-science",
-        icon: "bi-bar-chart-line"
+        icon: "bi-bar-chart-line",
     },
     {
         id: 6,
@@ -75,7 +75,7 @@ const COURSES = [
         lessons: 14,
         price: 59,
         thumbClass: "thumb-data-science",
-        icon: "bi-graph-up"
+        icon: "bi-graph-up",
     },
     {
         id: 7,
@@ -87,7 +87,7 @@ const COURSES = [
         lessons: 9,
         price: 0,
         thumbClass: "thumb-marketing",
-        icon: "bi-megaphone"
+        icon: "bi-megaphone",
     },
     {
         id: 8,
@@ -99,15 +99,15 @@ const COURSES = [
         lessons: 16,
         price: 69,
         thumbClass: "thumb-marketing",
-        icon: "bi-search"
-    }
+        icon: "bi-search",
+    },
 ];
 
 // Current UI state for filtering/sorting the course grid
 const state = {
     searchTerm: "",
     activeCategory: "All",
-    sortBy: "default"
+    sortBy: "default",
 };
 
 // Formats a numeric price into a display string ("FREE" or "$49")
@@ -151,7 +151,8 @@ function buildCourseCard(course) {
 function getFilteredCourses() {
     let list = COURSES.filter((course) => {
         const matchesCategory =
-            state.activeCategory === "All" || course.category === state.activeCategory;
+            state.activeCategory === "All" ||
+            course.category === state.activeCategory;
 
         const term = state.searchTerm.trim().toLowerCase();
         const matchesSearch =
@@ -244,10 +245,6 @@ function initSort() {
 
 // Entry point: runs once the DOM is ready
 document.addEventListener("DOMContentLoaded", () => {
-    if (!document.getElementById("courseGrid")) {
-        return;
-    }
-
     initSearch();
     initCategoryTabs();
     initSort();
