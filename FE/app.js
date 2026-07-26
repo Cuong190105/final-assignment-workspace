@@ -244,10 +244,6 @@ function initSort() {
 
 // Entry point: runs once the DOM is ready
 document.addEventListener("DOMContentLoaded", () => {
-    if (!document.getElementById("courseGrid")) {
-        return;
-    }
-
     initSearch();
     initCategoryTabs();
     initSort();
