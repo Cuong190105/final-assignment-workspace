@@ -3,9 +3,17 @@
    Used by admin.html
    ============================================================ */
 
+// The data in admin page is not linked to the main course catalog yet, so any course modification will not affect the course list in index.html
+
 const ADMIN_STORAGE_KEY = "learnhub_admin_courses";
 const ADMIN_PAGE_SIZE = 5;
-const ADMIN_CATEGORIES = ["Web Dev", "Design", "Data Science", "Marketing", "Other"];
+const ADMIN_CATEGORIES = [
+    "Web Dev",
+    "Design",
+    "Data Science",
+    "Marketing",
+    "Other",
+];
 const ADMIN_STATUSES = ["Published", "Draft"];
 
 const adminState = {
@@ -19,7 +27,7 @@ const adminState = {
     currentPage: 1,
     editingId: null,
     deletingIds: [],
-    selectedCourseIds: []
+    selectedCourseIds: [],
 };
 
 let courseModal = null;
@@ -28,7 +36,7 @@ let adminToast = null;
 
 // Returns a safe copy of the shared hardcoded course data.
 function getSeedCourses() {
-    return COURSES.map((course) => normalizeCourse(course));
+    return getCourseCatalog().map((course) => normalizeCourse(course));
 }
 
 // Adds missing admin fields and coerces values to the expected types.
@@ -36,15 +44,19 @@ function normalizeCourse(course) {
     return {
         id: Number(course.id),
         title: String(course.title || "").trim(),
-        category: ADMIN_CATEGORIES.includes(course.category) ? course.category : "Other",
+        category: ADMIN_CATEGORIES.includes(course.category)
+            ? course.category
+            : "Other",
         instructor: String(course.instructor || "").trim(),
         rating: Number(course.rating) || 1,
         reviews: Number(course.reviews) || 0,
         lessons: Number(course.lessons) || 1,
         price: Number(course.price) || 0,
-        status: ADMIN_STATUSES.includes(course.status) ? course.status : "Published",
+        status: ADMIN_STATUSES.includes(course.status)
+            ? course.status
+            : "Published",
         thumbClass: course.thumbClass || "thumb-web-dev",
-        icon: course.icon || "bi-journal-bookmark-fill"
+        icon: course.icon || "bi-journal-bookmark-fill",
     };
 }
 
@@ -71,7 +83,10 @@ function loadCourses() {
 
 // Saves courses to localStorage.
 function saveCourses(courses) {
-    localStorage.setItem(ADMIN_STORAGE_KEY, JSON.stringify(courses.map(normalizeCourse)));
+    localStorage.setItem(
+        ADMIN_STORAGE_KEY,
+        JSON.stringify(courses.map(normalizeCourse)),
+    );
 }
 
 // Formats a course price for the admin table.
@@ -92,12 +107,16 @@ function escapeHtml(value) {
 // Returns the next numeric id for a new course.
 function getNextCourseId() {
     if (adminState.courses.length === 0) return 1;
-    return Math.max(...adminState.courses.map((course) => Number(course.id))) + 1;
+    return (
+        Math.max(...adminState.courses.map((course) => Number(course.id))) + 1
+    );
 }
 
 // Returns sorted unique instructor names.
 function getInstructorOptions() {
-    return Array.from(new Set(adminState.courses.map((course) => course.instructor)))
+    return Array.from(
+        new Set(adminState.courses.map((course) => course.instructor)),
+    )
         .filter((name) => name !== "")
         .sort((a, b) => a.localeCompare(b));
 }
@@ -137,24 +156,40 @@ function getFilteredCourses() {
             course.title.toLowerCase().includes(term) ||
             course.instructor.toLowerCase().includes(term);
         const matchesInstructor =
-            adminState.instructorFilter === "All" || course.instructor === adminState.instructorFilter;
+            adminState.instructorFilter === "All" ||
+            course.instructor === adminState.instructorFilter;
         const matchesCategory =
-            adminState.categoryFilter === "All" || course.category === adminState.categoryFilter;
+            adminState.categoryFilter === "All" ||
+            course.category === adminState.categoryFilter;
         const matchesStatus =
-            adminState.statusFilter === "All" || course.status === adminState.statusFilter;
+            adminState.statusFilter === "All" ||
+            course.status === adminState.statusFilter;
 
-        return matchesSearch && matchesInstructor && matchesCategory && matchesStatus;
+        return (
+            matchesSearch &&
+            matchesInstructor &&
+            matchesCategory &&
+            matchesStatus
+        );
     });
 
     switch (adminState.sortBy) {
         case "title-asc":
-            return filtered.slice().sort((a, b) => a.title.localeCompare(b.title));
+            return filtered
+                .slice()
+                .sort((a, b) => a.title.localeCompare(b.title));
         case "instructor-asc":
-            return filtered.slice().sort((a, b) => a.instructor.localeCompare(b.instructor));
+            return filtered
+                .slice()
+                .sort((a, b) => a.instructor.localeCompare(b.instructor));
         case "lessons-desc":
-            return filtered.slice().sort((a, b) => Number(b.lessons) - Number(a.lessons));
+            return filtered
+                .slice()
+                .sort((a, b) => Number(b.lessons) - Number(a.lessons));
         case "rating-desc":
-            return filtered.slice().sort((a, b) => Number(b.rating) - Number(a.rating));
+            return filtered
+                .slice()
+                .sort((a, b) => Number(b.rating) - Number(a.rating));
         default:
             return filtered;
     }
@@ -162,7 +197,10 @@ function getFilteredCourses() {
 
 // Returns pagination metadata for the current filtered course list.
 function getPagination(filteredCourses) {
-    const totalPages = Math.max(1, Math.ceil(filteredCourses.length / ADMIN_PAGE_SIZE));
+    const totalPages = Math.max(
+        1,
+        Math.ceil(filteredCourses.length / ADMIN_PAGE_SIZE),
+    );
     const currentPage = Math.min(adminState.currentPage, totalPages);
     const start = (currentPage - 1) * ADMIN_PAGE_SIZE;
     const pageItems = filteredCourses.slice(start, start + ADMIN_PAGE_SIZE);
@@ -173,13 +211,16 @@ function getPagination(filteredCourses) {
 
 // Builds the status badge for a course row.
 function buildStatusBadge(status) {
-    const badgeClass = status === "Published" ? "text-bg-success" : "text-bg-secondary";
+    const badgeClass =
+        status === "Published" ? "text-bg-success" : "text-bg-secondary";
     return `<span class="badge ${badgeClass}">${escapeHtml(status)}</span>`;
 }
 
 // Builds one course table row.
 function buildCourseRow(course, index) {
-    const checked = adminState.selectedCourseIds.includes(Number(course.id)) ? "checked" : "";
+    const checked = adminState.selectedCourseIds.includes(Number(course.id))
+        ? "checked"
+        : "";
     return `
         <tr>
             <td>${index}</td>
@@ -241,7 +282,16 @@ function toCsvCell(value) {
 
 // Downloads the current filtered and sorted course list as CSV.
 function downloadCourseReport() {
-    const headers = ["#", "Title", "Instructor", "Category", "Lessons", "Price", "Rating", "Status"];
+    const headers = [
+        "#",
+        "Title",
+        "Instructor",
+        "Category",
+        "Lessons",
+        "Price",
+        "Rating",
+        "Status",
+    ];
     const rows = getFilteredCourses().map((course, index) => [
         index + 1,
         course.title,
@@ -250,9 +300,11 @@ function downloadCourseReport() {
         course.lessons,
         Number(course.price),
         Number(course.rating).toFixed(1),
-        course.status
+        course.status,
     ]);
-    const csv = [headers, ...rows].map((row) => row.map(toCsvCell).join(",")).join("\n");
+    const csv = [headers, ...rows]
+        .map((row) => row.map(toCsvCell).join(","))
+        .join("\n");
     const blob = new Blob([csv], { type: "text/csv;charset=utf-8" });
     const url = URL.createObjectURL(blob);
     const link = document.createElement("a");
@@ -274,7 +326,9 @@ function toggleCourseSelection(courseId, checked) {
     }
 
     if (!checked) {
-        adminState.selectedCourseIds = adminState.selectedCourseIds.filter((selectedId) => selectedId !== id);
+        adminState.selectedCourseIds = adminState.selectedCourseIds.filter(
+            (selectedId) => selectedId !== id,
+        );
     }
 
     renderAdminView();
@@ -286,9 +340,13 @@ function toggleCurrentPageSelection(checked) {
     const pageIds = pageItems.map((course) => Number(course.id));
 
     if (checked) {
-        adminState.selectedCourseIds = Array.from(new Set([...adminState.selectedCourseIds, ...pageIds]));
+        adminState.selectedCourseIds = Array.from(
+            new Set([...adminState.selectedCourseIds, ...pageIds]),
+        );
     } else {
-        adminState.selectedCourseIds = adminState.selectedCourseIds.filter((id) => !pageIds.includes(id));
+        adminState.selectedCourseIds = adminState.selectedCourseIds.filter(
+            (id) => !pageIds.includes(id),
+        );
     }
 
     renderAdminView();
@@ -297,7 +355,9 @@ function toggleCurrentPageSelection(checked) {
 // Keeps selected ids aligned with existing courses.
 function pruneSelectedCourses() {
     const existingIds = adminState.courses.map((course) => Number(course.id));
-    adminState.selectedCourseIds = adminState.selectedCourseIds.filter((id) => existingIds.includes(id));
+    adminState.selectedCourseIds = adminState.selectedCourseIds.filter((id) =>
+        existingIds.includes(id),
+    );
 }
 
 // Renders a placeholder for unfinished admin sections.
@@ -319,14 +379,21 @@ function renderDevelopmentView(title) {
 // Renders the courses management tab.
 function renderCoursesView() {
     const filteredCourses = getFilteredCourses();
-    const { totalPages, currentPage, pageItems } = getPagination(filteredCourses);
+    const { totalPages, currentPage, pageItems } =
+        getPagination(filteredCourses);
     const startIndex = (currentPage - 1) * ADMIN_PAGE_SIZE;
     const instructorOptions = getInstructorOptions();
     const allPageSelected =
         pageItems.length > 0 &&
-        pageItems.every((course) => adminState.selectedCourseIds.includes(Number(course.id)));
+        pageItems.every((course) =>
+            adminState.selectedCourseIds.includes(Number(course.id)),
+        );
     const rows = pageItems.length
-        ? pageItems.map((course, index) => buildCourseRow(course, startIndex + index + 1)).join("")
+        ? pageItems
+              .map((course, index) =>
+                  buildCourseRow(course, startIndex + index + 1),
+              )
+              .join("")
         : `<tr><td colspan="10" class="text-center text-muted py-4">No results</td></tr>`;
 
     return `
@@ -355,21 +422,29 @@ function renderCoursesView() {
                 </div>
                 <select class="form-select" id="adminInstructorFilter" aria-label="Filter by instructor">
                     <option value="All">All Instructors</option>
-                    ${instructorOptions.map((instructor) => `
+                    ${instructorOptions
+                        .map(
+                            (instructor) => `
                         <option value="${escapeHtml(instructor)}" ${adminState.instructorFilter === instructor ? "selected" : ""}>${escapeHtml(instructor)}</option>
-                    `).join("")}
+                    `,
+                        )
+                        .join("")}
                 </select>
                 <select class="form-select" id="adminCategoryFilter" aria-label="Filter by category">
                     <option value="All">All Categories</option>
-                    ${ADMIN_CATEGORIES.map((category) => `
+                    ${ADMIN_CATEGORIES.map(
+                        (category) => `
                         <option value="${category}" ${adminState.categoryFilter === category ? "selected" : ""}>${category}</option>
-                    `).join("")}
+                    `,
+                    ).join("")}
                 </select>
                 <select class="form-select" id="adminStatusFilter" aria-label="Filter by status">
                     <option value="All">All Statuses</option>
-                    ${ADMIN_STATUSES.map((status) => `
+                    ${ADMIN_STATUSES.map(
+                        (status) => `
                         <option value="${status}" ${adminState.statusFilter === status ? "selected" : ""}>${status}</option>
-                    `).join("")}
+                    `,
+                    ).join("")}
                 </select>
                 <select class="form-select" id="adminSortSelect" aria-label="Sort courses">
                     <option value="default">Sort: Default</option>
@@ -417,7 +492,7 @@ function renderAdminView() {
         dashboard: () => renderDevelopmentView("Dashboard"),
         courses: renderCoursesView,
         instructors: () => renderDevelopmentView("Instructors"),
-        reports: () => renderDevelopmentView("Reports")
+        reports: () => renderDevelopmentView("Reports"),
     };
 
     view.innerHTML = renderMap[adminState.activeTab]();
@@ -440,7 +515,9 @@ function openCreateModal() {
 
 // Opens the edit course modal with existing values.
 function openEditModal(courseId) {
-    const course = adminState.courses.find((item) => Number(item.id) === Number(courseId));
+    const course = adminState.courses.find(
+        (item) => Number(item.id) === Number(courseId),
+    );
     if (!course) return;
 
     adminState.editingId = Number(course.id);
@@ -459,7 +536,9 @@ function openEditModal(courseId) {
 
 // Opens the delete confirmation modal for a course.
 function openDeleteModal(courseId) {
-    const course = adminState.courses.find((item) => Number(item.id) === Number(courseId));
+    const course = adminState.courses.find(
+        (item) => Number(item.id) === Number(courseId),
+    );
     if (!course) return;
 
     adminState.deletingIds = [Number(course.id)];
@@ -478,10 +557,15 @@ function openBulkDeleteModal() {
     if (adminState.selectedCourseIds.length === 0) return;
 
     adminState.deletingIds = adminState.selectedCourseIds.slice();
-    document.getElementById("deleteModalTitle").textContent = "Delete Selected Courses";
-    document.getElementById("deleteCourseTitle").textContent = `${adminState.deletingIds.length} selected courses`;
+    document.getElementById("deleteModalTitle").textContent =
+        "Delete Selected Courses";
+    document.getElementById("deleteCourseTitle").textContent =
+        `${adminState.deletingIds.length} selected courses`;
 
-    if (adminState.deletingIds.includes(Number(adminState.editingId)) && courseModal) {
+    if (
+        adminState.deletingIds.includes(Number(adminState.editingId)) &&
+        courseModal
+    ) {
         courseModal.hide();
     }
 
@@ -497,7 +581,7 @@ function getCourseFormData() {
         lessons: Number(document.getElementById("courseLessons").value),
         price: Number(document.getElementById("coursePrice").value),
         rating: Number(document.getElementById("courseRating").value),
-        status: document.getElementById("courseStatus").value
+        status: document.getElementById("courseStatus").value,
     };
 }
 
@@ -522,9 +606,15 @@ function getCourseVisuals(category) {
     const visualMap = {
         "Web Dev": { thumbClass: "thumb-web-dev", icon: "bi-code-slash" },
         Design: { thumbClass: "thumb-design", icon: "bi-palette" },
-        "Data Science": { thumbClass: "thumb-data-science", icon: "bi-bar-chart-line" },
+        "Data Science": {
+            thumbClass: "thumb-data-science",
+            icon: "bi-bar-chart-line",
+        },
         Marketing: { thumbClass: "thumb-marketing", icon: "bi-megaphone" },
-        Other: { thumbClass: "thumb-web-dev", icon: "bi-journal-bookmark-fill" }
+        Other: {
+            thumbClass: "thumb-web-dev",
+            icon: "bi-journal-bookmark-fill",
+        },
     };
     return visualMap[category] || visualMap.Other;
 }
@@ -532,14 +622,17 @@ function getCourseVisuals(category) {
 // Creates a new course from form data.
 function createCourse(data) {
     const visuals = getCourseVisuals(data.category);
-    adminState.courses.push(normalizeCourse({
-        ...data,
-        ...visuals,
-        id: getNextCourseId(),
-        reviews: 0
-    }));
+    adminState.courses.push(
+        normalizeCourse({
+            ...data,
+            ...visuals,
+            id: getNextCourseId(),
+            reviews: 0,
+        }),
+    );
     saveCourses(adminState.courses);
-    adminState.currentPage = Math.ceil(getFilteredCourses().length / ADMIN_PAGE_SIZE) || 1;
+    adminState.currentPage =
+        Math.ceil(getFilteredCourses().length / ADMIN_PAGE_SIZE) || 1;
     renderAdminView();
     showToast("Course created.");
 }
@@ -552,7 +645,7 @@ function updateCourse(data) {
         return normalizeCourse({
             ...course,
             ...data,
-            ...visuals
+            ...visuals,
         });
     });
     saveCourses(adminState.courses);
@@ -595,13 +688,17 @@ function confirmDeleteCourse() {
     adminState.deletingIds = [];
     deleteModal.hide();
     renderAdminView();
-    showToast(deletedCount === 1 ? "Course deleted." : "Selected courses deleted.");
+    showToast(
+        deletedCount === 1 ? "Course deleted." : "Selected courses deleted.",
+    );
 }
 
 // Binds events for the sidebar navigation.
 function bindSidebarEvents() {
     document.querySelectorAll(".admin-nav-link").forEach((button) => {
-        button.addEventListener("click", () => setActiveTab(button.dataset.adminTab));
+        button.addEventListener("click", () =>
+            setActiveTab(button.dataset.adminTab),
+        );
     });
 }
 
@@ -677,16 +774,23 @@ function bindCoursesEvents() {
     }
 
     document.querySelectorAll("[data-edit-course]").forEach((button) => {
-        button.addEventListener("click", () => openEditModal(button.dataset.editCourse));
+        button.addEventListener("click", () =>
+            openEditModal(button.dataset.editCourse),
+        );
     });
 
     document.querySelectorAll("[data-delete-course]").forEach((button) => {
-        button.addEventListener("click", () => openDeleteModal(button.dataset.deleteCourse));
+        button.addEventListener("click", () =>
+            openDeleteModal(button.dataset.deleteCourse),
+        );
     });
 
     document.querySelectorAll("[data-select-course]").forEach((checkbox) => {
         checkbox.addEventListener("change", () => {
-            toggleCourseSelection(checkbox.dataset.selectCourse, checkbox.checked);
+            toggleCourseSelection(
+                checkbox.dataset.selectCourse,
+                checkbox.checked,
+            );
         });
     });
 
@@ -698,12 +802,18 @@ function bindCoursesEvents() {
 // Changes the current courses table page.
 function changePage(pageValue) {
     const filteredCourses = getFilteredCourses();
-    const totalPages = Math.max(1, Math.ceil(filteredCourses.length / ADMIN_PAGE_SIZE));
+    const totalPages = Math.max(
+        1,
+        Math.ceil(filteredCourses.length / ADMIN_PAGE_SIZE),
+    );
 
     if (pageValue === "prev") {
         adminState.currentPage = Math.max(1, adminState.currentPage - 1);
     } else if (pageValue === "next") {
-        adminState.currentPage = Math.min(totalPages, adminState.currentPage + 1);
+        adminState.currentPage = Math.min(
+            totalPages,
+            adminState.currentPage + 1,
+        );
     } else {
         adminState.currentPage = Number(pageValue);
     }
@@ -720,18 +830,35 @@ function bindCurrentViewEvents() {
 
 // Initializes Bootstrap components used by the admin page.
 function initAdminComponents() {
-    courseModal = bootstrap.Modal.getOrCreateInstance(document.getElementById("courseModal"));
-    deleteModal = bootstrap.Modal.getOrCreateInstance(document.getElementById("deleteModal"));
-    adminToast = bootstrap.Toast.getOrCreateInstance(document.getElementById("adminToast"));
+    courseModal = bootstrap.Modal.getOrCreateInstance(
+        document.getElementById("courseModal"),
+    );
+    deleteModal = bootstrap.Modal.getOrCreateInstance(
+        document.getElementById("deleteModal"),
+    );
+    adminToast = bootstrap.Toast.getOrCreateInstance(
+        document.getElementById("adminToast"),
+    );
 }
 
-// Entry point for the admin page.
-document.addEventListener("DOMContentLoaded", () => {
-    adminState.courses = loadCourses();
-    saveCourses(adminState.courses);
-    initAdminComponents();
-    bindSidebarEvents();
-    document.getElementById("courseForm").addEventListener("submit", handleCourseFormSubmit);
-    document.getElementById("confirmDeleteBtn").addEventListener("click", confirmDeleteCourse);
-    renderAdminView();
-});
+const currentAdminUser =
+    typeof getLoggedInUser === "function" ? getLoggedInUser() : null;
+
+if (!currentAdminUser) {
+    window.location.replace("login.html");
+} else {
+    // Entry point for the admin page.
+    document.addEventListener("DOMContentLoaded", () => {
+        adminState.courses = loadCourses();
+        saveCourses(adminState.courses);
+        initAdminComponents();
+        bindSidebarEvents();
+        document
+            .getElementById("courseForm")
+            .addEventListener("submit", handleCourseFormSubmit);
+        document
+            .getElementById("confirmDeleteBtn")
+            .addEventListener("click", confirmDeleteCourse);
+        renderAdminView();
+    });
+}
