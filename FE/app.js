@@ -3,6 +3,38 @@
    Used by index.html (Course Listing + Search/Filter/Sort)
    ============================================================ */
 
+// Hardcoded user credentials
+const USERS = [
+    {
+        id: 1,
+        fullname: "Admin One",
+        username: "admin1",
+        password: "adminpass1",
+        role: "admin",
+    },
+    {
+        id: 2,
+        fullname: "Student One",
+        username: "student1",
+        password: "password1",
+        role: "student",
+    },
+    {
+        id: 3,
+        fullname: "Student Two",
+        username: "student2",
+        password: "password2",
+        role: "student",
+    },
+    {
+        id: 4,
+        fullname: "Student Three",
+        username: "student3",
+        password: "password3",
+        role: "student",
+    },
+];
+
 // Hardcoded course catalogue — at least 6 courses across 3+ categories
 const COURSES = [
     {
@@ -109,6 +141,26 @@ const state = {
     activeCategory: "All",
     sortBy: "default",
 };
+
+function getLoggedInUser() {
+    const rawUser = localStorage.getItem("loggedInUser");
+
+    if (!rawUser) {
+        return null;
+    }
+
+    try {
+        const parsedUser = JSON.parse(rawUser);
+
+        return parsedUser && typeof parsedUser === "object" ? parsedUser : null;
+    } catch {
+        return null;
+    }
+}
+
+function clearLoggedInUser() {
+    localStorage.removeItem("loggedInUser");
+}
 
 // Formats a numeric price into a display string ("FREE" or "$49")
 function formatPrice(price) {
@@ -243,10 +295,148 @@ function initSort() {
     });
 }
 
+function renderAuthNav() {
+    const authNav = document.querySelector("[data-auth-nav]");
+    const navBar = document.querySelector(".navbar-nav");
+
+    if (!authNav) {
+        return;
+    }
+
+    const user = getLoggedInUser();
+    authNav.innerHTML = "";
+
+    if (!user) {
+        const loginLink = document.createElement("a");
+        loginLink.className = "btn-custom btn-primary-custom";
+        loginLink.href = "login.html";
+        loginLink.textContent = "Login";
+        authNav.appendChild(loginLink);
+        return;
+    } else if (
+        user.role === "admin" &&
+        !window.location.pathname.includes("admin.html")
+    ) {
+        const adminLink = document.createElement("a");
+        adminLink.className = "nav-link nav-admin";
+        adminLink.href = "admin.html";
+        adminLink.textContent = "Admin Panel";
+        const adminNavItem = document.createElement("li");
+        adminNavItem.className = "nav-item";
+        adminNavItem.appendChild(adminLink);
+        navBar.appendChild(adminNavItem);
+    }
+
+    const stack = document.createElement("div");
+    stack.className = "auth-nav-stack";
+
+    const userName = document.createElement("span");
+    userName.className = "auth-user-name";
+    userName.textContent = user.fullname || user.username || "User";
+
+    const logoutButton = document.createElement("button");
+    logoutButton.type = "button";
+    logoutButton.className = "btn-custom btn-logout-custom";
+    logoutButton.textContent = "Logout";
+    logoutButton.addEventListener("click", () => {
+        clearLoggedInUser();
+        renderAuthNav();
+        window.location.href = "index.html";
+    });
+
+    stack.append(userName, logoutButton);
+    authNav.appendChild(stack);
+}
+
+function setAuthMessage(message, type = "success") {
+    const alertBox = document.getElementById("authMessage");
+
+    if (!alertBox) {
+        return;
+    }
+
+    alertBox.className = `alert alert-${type} auth-message show`;
+    alertBox.textContent = message;
+}
+
+function togglePassword(button) {
+    const targetId = button.getAttribute("data-target");
+    const input = document.getElementById(targetId);
+
+    if (!input) {
+        return;
+    }
+
+    const isPassword = input.type === "password";
+    input.type = isPassword ? "text" : "password";
+    button.innerHTML = isPassword
+        ? '<i class="bi bi-eye-slash"></i>'
+        : '<i class="bi bi-eye"></i>';
+    button.setAttribute(
+        "aria-label",
+        isPassword ? "Hide password" : "Show password",
+    );
+}
+
+function handleAuthSubmit(form) {
+    form.addEventListener("submit", (event) => {
+        event.preventDefault();
+
+        if (!form.checkValidity()) {
+            form.classList.add("was-validated");
+            setAuthMessage("Please fill in all required fields.", "danger");
+            return;
+        }
+
+        const username = form.querySelector("#username")?.value.trim();
+        const password = form.querySelector("#loginPassword")?.value.trim();
+        const user = USERS.find(
+            (user) => user.username === username && user.password === password,
+        );
+        if (user) {
+            setAuthMessage("Login successful.");
+            localStorage.setItem(
+                "loggedInUser",
+                JSON.stringify({
+                    id: user.id,
+                    fullname: user.fullname,
+                    role: user.role || "student",
+                }),
+            );
+            window.setTimeout(() => {
+                window.location.href = "index.html";
+            }, 900);
+            return;
+        } else {
+            setAuthMessage("Invalid username or password.", "danger");
+        }
+    });
+}
+
+function initAuthPage() {
+    const authForms = document.querySelectorAll("[data-auth-form]");
+
+    if (authForms.length === 0) {
+        return;
+    }
+
+    authForms.forEach(handleAuthSubmit);
+
+    document.querySelectorAll("[data-password-toggle]").forEach((button) => {
+        button.addEventListener("click", () => togglePassword(button));
+    });
+}
+
 // Entry point: runs once the DOM is ready
 document.addEventListener("DOMContentLoaded", () => {
-    initSearch();
-    initCategoryTabs();
-    initSort();
-    renderCourses();
+    renderAuthNav();
+
+    if (document.getElementById("courseGrid")) {
+        initSearch();
+        initCategoryTabs();
+        initSort();
+        renderCourses();
+    }
+
+    initAuthPage();
 });
