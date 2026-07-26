@@ -295,6 +295,7 @@ function initSort() {
     });
 }
 
+// Change login button to user info + logout if logged in
 function renderAuthNav() {
     const authNav = document.querySelector("[data-auth-nav]");
     const navBar = document.querySelector(".navbar-nav");
@@ -348,6 +349,7 @@ function renderAuthNav() {
     authNav.appendChild(stack);
 }
 
+// Display messages on login
 function setAuthMessage(message, type = "success") {
     const alertBox = document.getElementById("authMessage");
 
@@ -359,6 +361,7 @@ function setAuthMessage(message, type = "success") {
     alertBox.textContent = message;
 }
 
+// Toggle password visibility
 function togglePassword(button) {
     const targetId = button.getAttribute("data-target");
     const input = document.getElementById(targetId);
@@ -378,6 +381,7 @@ function togglePassword(button) {
     );
 }
 
+// Handle login
 function handleAuthSubmit(form) {
     form.addEventListener("submit", (event) => {
         event.preventDefault();
@@ -413,6 +417,7 @@ function handleAuthSubmit(form) {
     });
 }
 
+// Add function to login form items
 function initAuthPage() {
     const authForms = document.querySelectorAll("[data-auth-form]");
 
